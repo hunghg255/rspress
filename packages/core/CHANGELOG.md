@@ -1,5 +1,69 @@
 # @rspress/core
 
+## 1.9.3
+
+### Patch Changes
+
+- Updated dependencies [ca9c0f6]
+- Updated dependencies [1617bae]
+  - @rspress/runtime@1.9.3
+  - @rspress/theme-default@1.9.3
+  - @rspress/plugin-medium-zoom@1.9.3
+  - @rspress/plugin-auto-nav-sidebar@1.9.3
+  - @rspress/plugin-container-syntax@1.9.3
+  - @rspress/plugin-last-updated@1.9.3
+  - @rspress/shared@1.9.3
+
+## 1.9.2
+
+### Patch Changes
+
+- Updated dependencies [6ac3d36]
+- Updated dependencies [e1619c7]
+- Updated dependencies [d8f974b]
+  - @rspress/theme-default@1.9.2
+  - @rspress/shared@1.9.2
+  - @rspress/plugin-auto-nav-sidebar@1.9.2
+  - @rspress/plugin-container-syntax@1.9.2
+  - @rspress/plugin-last-updated@1.9.2
+  - @rspress/plugin-medium-zoom@1.9.2
+  - @rspress/runtime@1.9.2
+
+## 1.9.1
+
+### Patch Changes
+
+- 0f79348: fix: search index file not found when i18n is not set
+- Updated dependencies [e97bbc6]
+- Updated dependencies [77125d5]
+  - @rspress/theme-default@1.9.1
+  - @rspress/plugin-auto-nav-sidebar@1.9.1
+  - @rspress/plugin-container-syntax@1.9.1
+  - @rspress/plugin-last-updated@1.9.1
+  - @rspress/plugin-medium-zoom@1.9.1
+  - @rspress/runtime@1.9.1
+  - @rspress/shared@1.9.1
+
+## 1.9.0
+
+### Minor Changes
+
+- 0f97eb8: feat: support custom search source
+
+### Patch Changes
+
+- a477d1b: perf(deps): remove unused ora and autoprefixer
+- Updated dependencies [0f97eb8]
+- Updated dependencies [08b9305]
+- Updated dependencies [f78ec18]
+  - @rspress/theme-default@1.9.0
+  - @rspress/shared@1.9.0
+  - @rspress/plugin-auto-nav-sidebar@1.9.0
+  - @rspress/plugin-container-syntax@1.9.0
+  - @rspress/plugin-last-updated@1.9.0
+  - @rspress/plugin-medium-zoom@1.9.0
+  - @rspress/runtime@1.9.0
+
 ## 1.8.4
 
 ### Patch Changes

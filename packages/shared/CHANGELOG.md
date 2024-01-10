@@ -1,5 +1,25 @@
 # @rspress/shared
 
+## 1.9.3
+
+## 1.9.2
+
+### Patch Changes
+
+- e1619c7: fix: sidebar disappeared in cleanUrl mode
+
+## 1.9.1
+
+## 1.9.0
+
+### Minor Changes
+
+- 0f97eb8: feat: support custom search source
+
+### Patch Changes
+
+- 08b9305: feat: optimize default sidebar title strategy
+
 ## 1.8.4
 
 ### Patch Changes

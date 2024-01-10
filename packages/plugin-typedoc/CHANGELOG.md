@@ -1,5 +1,32 @@
 # @rspress/plugin-typedoc
 
+## 1.9.3
+
+### Patch Changes
+
+- @rspress/shared@1.9.3
+
+## 1.9.2
+
+### Patch Changes
+
+- Updated dependencies [e1619c7]
+  - @rspress/shared@1.9.2
+
+## 1.9.1
+
+### Patch Changes
+
+- @rspress/shared@1.9.1
+
+## 1.9.0
+
+### Patch Changes
+
+- Updated dependencies [0f97eb8]
+- Updated dependencies [08b9305]
+  - @rspress/shared@1.9.0
+
 ## 1.8.4
 
 ### Patch Changes

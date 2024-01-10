@@ -6,6 +6,7 @@ import { logger } from '@rspress/shared/logger';
 import chokidar from 'chokidar';
 import chalk from 'chalk';
 import { loadConfigFile } from './config/loadConfigFile';
+import update from './update';
 
 const CONFIG_FILES = ['rspress.config.ts', 'rspress.config.js', '_meta.json'];
 
@@ -23,7 +24,7 @@ const setNodeEnv = (env: 'development' | 'production') => {
   process.env.NODE_ENV = env;
 };
 
-cli.option('--config [config]', 'Specify the path to the config file');
+cli.option('-c,--config [config]', 'Specify the path to the config file');
 
 cli
   .command('[root]', 'start dev server') // default command
@@ -104,27 +105,23 @@ cli
     },
   );
 
-cli
-  .command('build [root]')
-  .option('-c --config <config>', 'specify config file')
-  .action(async (root, options) => {
-    setNodeEnv('production');
-    const cwd = process.cwd();
-    const config = await loadConfigFile(options.config);
-    if (root) {
-      config.root = path.join(cwd, root);
-    }
-    await build({
-      appDirectory: cwd,
-      docDirectory: config.root || path.join(cwd, root ?? 'docs'),
-      config,
-    });
+cli.command('build [root]').action(async (root, options) => {
+  setNodeEnv('production');
+  const cwd = process.cwd();
+  const config = await loadConfigFile(options.config);
+  if (root) {
+    config.root = path.join(cwd, root);
+  }
+  await build({
+    appDirectory: cwd,
+    docDirectory: config.root || path.join(cwd, root ?? 'docs'),
+    config,
   });
+});
 
 cli
   .command('preview')
   .alias('serve')
-  .option('-c --config <config>', 'specify config file')
   .option('--port [port]', 'port number')
   .option('--host [host]', 'hostname')
   .action(
@@ -140,5 +137,7 @@ cli
       });
     },
   );
+
+cli.command('update', 'update elavant packages about rspress').action(update);
 
 cli.parse();

@@ -1,5 +1,43 @@
 # @modern-js/plugin-rspress
 
+## 1.9.3
+
+### Patch Changes
+
+- Updated dependencies [15e3905]
+- Updated dependencies [a949537]
+  - @rspress/plugin-api-docgen@1.9.3
+  - @rspress/plugin-preview@1.9.3
+  - @rspress/core@1.9.3
+
+## 1.9.2
+
+### Patch Changes
+
+- @rspress/core@1.9.2
+- @rspress/plugin-api-docgen@1.9.2
+- @rspress/plugin-preview@1.9.2
+
+## 1.9.1
+
+### Patch Changes
+
+- Updated dependencies [0f79348]
+  - @rspress/core@1.9.1
+  - @rspress/plugin-api-docgen@1.9.1
+  - @rspress/plugin-preview@1.9.1
+
+## 1.9.0
+
+### Patch Changes
+
+- 550a83e: fix(modern-plugin): deprecate some config and optimize sidebar and locale
+- Updated dependencies [0f97eb8]
+- Updated dependencies [a477d1b]
+  - @rspress/core@1.9.0
+  - @rspress/plugin-api-docgen@1.9.0
+  - @rspress/plugin-preview@1.9.0
+
 ## 1.8.4
 
 ### Patch Changes

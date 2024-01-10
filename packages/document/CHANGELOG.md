@@ -1,5 +1,21 @@
 # @rspress/docs
 
+## 1.9.3
+
+## 1.9.2
+
+## 1.9.1
+
+### Patch Changes
+
+- e97bbc6: feat: add after nav menu slot
+
+## 1.9.0
+
+### Minor Changes
+
+- 13e2722: feat: add translate-plugins
+
 ## 1.8.4
 
 ## 1.8.3

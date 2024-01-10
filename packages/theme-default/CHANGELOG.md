@@ -1,5 +1,48 @@
 # @rspress/theme-default
 
+## 1.9.3
+
+### Patch Changes
+
+- 1617bae: feat: add class name for nav menu item and search button
+- Updated dependencies [ca9c0f6]
+  - @rspress/runtime@1.9.3
+  - @rspress/shared@1.9.3
+
+## 1.9.2
+
+### Patch Changes
+
+- 6ac3d36: feat: support custom render type in onSearch hook
+- e1619c7: fix: sidebar disappeared in cleanUrl mode
+- d8f974b: fix: normalize text case for number
+- Updated dependencies [e1619c7]
+  - @rspress/shared@1.9.2
+  - @rspress/runtime@1.9.2
+
+## 1.9.1
+
+### Patch Changes
+
+- e97bbc6: feat: add after nav menu slot
+- 77125d5: fix: failed to submit search when rendering with react@16
+  - @rspress/runtime@1.9.1
+  - @rspress/shared@1.9.1
+
+## 1.9.0
+
+### Minor Changes
+
+- 0f97eb8: feat: support custom search source
+
+### Patch Changes
+
+- f78ec18: fix: class selector in code block
+- Updated dependencies [0f97eb8]
+- Updated dependencies [08b9305]
+  - @rspress/shared@1.9.0
+  - @rspress/runtime@1.9.0
+
 ## 1.8.4
 
 ### Patch Changes

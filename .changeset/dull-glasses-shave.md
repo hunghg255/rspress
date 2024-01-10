@@ -2,4 +2,4 @@
 '@rspress/theme-default': patch
 ---
 
-fix: class selector in code block
+fix: table word break style
