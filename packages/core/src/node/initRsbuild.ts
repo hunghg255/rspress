@@ -1,14 +1,14 @@
 import path from 'path';
-import type { UserConfig } from '@rspress/shared';
-import fs from '@rspress/shared/fs-extra';
 import {
+  type UserConfig,
+  removeLeadingSlash,
   MDX_REGEXP,
   RSPRESS_TEMP_DIR,
   isDebugMode,
   removeTrailingSlash,
 } from '@rspress/shared';
+import fs from '@rspress/shared/fs-extra';
 import type { RsbuildInstance, RsbuildConfig } from '@rsbuild/core';
-import sirv from 'sirv';
 import { tailwindConfig } from '../../tailwind.config';
 import {
   CLIENT_ENTRY,
@@ -51,8 +51,6 @@ async function createInternalBuildConfig(
   const checkDeadLinks = (config?.markdown?.checkDeadLinks && !isSSR) ?? false;
   const base = config?.base ?? '';
 
-  const publicDir = path.join(userDocRoot, 'public');
-  const isPublicDirExist = await fs.pathExists(publicDir);
   // In production, we need to add assetPrefix in asset path
   const assetPrefix = isProduction()
     ? removeTrailingSlash(config?.builderConfig?.output?.assetPrefix ?? base)
@@ -89,16 +87,20 @@ async function createInternalBuildConfig(
         !isProduction() && process.env.PORT
           ? Number(process.env.PORT)
           : undefined,
+      printUrls: ({ urls }) => {
+        return urls.map(url => `${url}/${removeLeadingSlash(base)}`);
+      },
+      publicDir: isSSR
+        ? false
+        : {
+            name: path.join(userDocRoot, PUBLIC_DIR),
+          },
     },
     dev: {
       progressBar: false,
       // Serve static files
       setupMiddlewares: [
         middlewares => {
-          if (isPublicDirExist) {
-            middlewares.unshift(sirv(publicDir));
-          }
-
           middlewares.unshift(serveSearchIndexMiddleware(config));
         },
       ],
@@ -114,8 +116,6 @@ async function createInternalBuildConfig(
         // `root` must be a relative path in Rsbuild
         root: path.isAbsolute(outDir) ? path.relative(cwd, outDir) : outDir,
       },
-      // Disable production source map, it is useless for doc site
-      disableSourceMap: isProduction(),
       overrideBrowserslist: browserslist,
       assetPrefix,
     },

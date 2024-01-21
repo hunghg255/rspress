@@ -1,5 +1,9 @@
 # @rspress/plugin-api-docgen
 
+## 1.10.1
+
+## 1.10.0
+
 ## 1.9.3
 
 ### Patch Changes
