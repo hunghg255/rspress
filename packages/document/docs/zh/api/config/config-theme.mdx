@@ -275,6 +275,23 @@ export default defineConfig({
 });
 ```
 
+## searchPlaceholderText
+
+- Type: `string`
+- Default: `Search Docs`
+
+搜索框的占位符文本。比如:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from 'rspress/config';
+
+export default defineConfig({
+  themeConfig: {
+    searchPlaceholderText: 'Search Docs',
+  },
+});
+```
+
 ## socialLinks
 
 - Type: `Array`
@@ -408,6 +425,8 @@ export interface LocaleConfig {
   prevPageText?: string;
   // 下一页文本
   nextPageText?: string;
+  // 搜索框占位符文本
+  searchPlaceholderText?: string;
 }
 ```
 
@@ -426,6 +445,26 @@ import { defineConfig } from 'rspress/config';
 export default defineConfig({
   themeConfig: {
     darkMode: true,
+  },
+});
+```
+
+同时，你也可以通过在 HTML 中注入如下的全局变量来指定默认的主题模式：
+
+```ts title="rspress.config.ts"
+import { defineConfig } from 'rspress/config';
+
+export default defineConfig({
+  builderConfig: {
+    html: {
+      tags: [
+        {
+          tag: 'script',
+          // 通过 window.RSPRESS_THEME 变量来指定默认的主题模式，可选值为 'dark' 和 'light'
+          children: "window.RSPRESS_THEME = 'dark';",
+        },
+      ],
+    },
   },
 });
 ```

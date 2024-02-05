@@ -24,7 +24,7 @@ function createPlaygroundNode(
 interface RemarkPluginProps {
   getRouteMeta: () => RouteMeta[];
   editorPosition: 'left' | 'right';
-  defaultRenderMode: 'pure' | 'preview';
+  defaultRenderMode: 'pure' | 'playground';
 }
 
 /**
@@ -39,7 +39,8 @@ export const remarkPlugin: Plugin<[RemarkPluginProps], Root> = ({
 
   return (tree, vfile) => {
     const route = routeMeta.find(
-      meta => resolve(meta.absolutePath) === resolve((vfile.path || vfile.history[0])),
+      meta =>
+        resolve(meta.absolutePath) === resolve(vfile.path || vfile.history[0]),
     );
     if (!route) {
       return;
@@ -74,14 +75,14 @@ export const remarkPlugin: Plugin<[RemarkPluginProps], Root> = ({
     visit(tree, 'code', node => {
       if (node.lang === 'jsx' || node.lang === 'tsx') {
         const hasPureMeta = node?.meta?.includes('pure');
-        const hasPreviewMeta = node?.meta?.includes('preview');
+        const hasPlaygroundMeta = node?.meta?.includes('playground');
 
         let noTransform;
         switch (defaultRenderMode) {
           case 'pure':
-            noTransform = !hasPreviewMeta;
+            noTransform = !hasPlaygroundMeta;
             break;
-          case 'preview':
+          case 'playground':
             noTransform = hasPureMeta;
             break;
           default:
