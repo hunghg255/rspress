@@ -89,6 +89,11 @@ export interface Config {
    * Whether to enable the animation for translation pages
    */
   enableContentAnimation?: boolean;
+  /**
+   * Enable scroll to top button on documentation
+   * @default false
+   */
+  enableScrollToTop?: boolean;
 }
 
 /**
@@ -226,6 +231,7 @@ export type SocialLinkIcon =
   | 'bilibili'
   | 'weibo'
   | 'gitlab'
+  | 'X'
   | { svg: string };
 
 // footer --------------------------------------------------------------------

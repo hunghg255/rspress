@@ -6,7 +6,7 @@ import {
   withBase,
 } from '@rspress/runtime';
 import styles from './index.module.scss';
-import { getLogoUrl, useLocaleSiteData } from '@/logic';
+import { getLogoUrl, useLocaleSiteData } from '#theme/logic';
 
 export const NavBarTitle = () => {
   const { siteData } = usePageData();
@@ -32,7 +32,6 @@ export const NavBarTitle = () => {
             alt="logo"
             id="logo"
             className="mr-4 rspress-logo"
-            style={{ height: '1.6rem' }}
           />
         ) : (
           <span>{title}</span>

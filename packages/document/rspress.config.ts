@@ -1,4 +1,3 @@
-import path from 'path';
 import { defineConfig } from 'rspress/config';
 
 export default defineConfig({
@@ -16,6 +15,12 @@ export default defineConfig({
   },
   icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/uhbfnupenuhf/rspress/rspress-logo.png',
   builderConfig: {
+    server: {
+      publicDir: {
+        name: 'public',
+        copyOnBuild: true,
+      },
+    },
     dev: {
       startUrl: false,
     },
@@ -24,9 +29,6 @@ export default defineConfig({
         'process.env.DOCUMATE_BACKEND_URL': JSON.stringify(
           process.env.DOCUMATE_BACKEND_URL,
         ),
-      },
-      alias: {
-        '@/logic': path.join(__dirname, '../theme-default/src/logic'),
       },
     },
     html: {
@@ -38,6 +40,13 @@ export default defineConfig({
             async: true,
             src: 'https://www.googletagmanager.com/gtag/js?id=G-66B2Z6KG0J',
           },
+        },
+        {
+          tag: 'meta',
+          attrs: {
+            content: 'https://github.com/web-infra-dev/rspress/assets/39261479/999e7946-45ff-45d5-b9cd-594e634e0e5a',
+            property: "og:image",
+          }
         },
         {
           tag: 'script',

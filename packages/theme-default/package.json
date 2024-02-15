@@ -1,6 +1,6 @@
 {
   "name": "@rspress/theme-default",
-  "version": "1.11.1",
+  "version": "1.11.2",
   "description": "The Default Theme of Rspress Documentation Framework",
   "bugs": "https://github.com/web-infra-dev/rspress/issues",
   "repository": {
@@ -13,11 +13,17 @@
   "jsnext:source": "./src/index.ts",
   "types": "./dist/bundle.d.ts",
   "main": "./dist/index.js",
+  "imports": {
+    "#theme/*": "./src/*"
+  },
   "exports": {
     ".": {
       "types": "./dist/bundle.d.ts",
       "default": "./dist/index.js"
-    }
+    },
+    "./node/*": "./dist/node/*",
+    "./package.json": "./package.json",
+    "./bundle.css": "./dist/bundle.css"
   },
   "scripts": {
     "dev": "modern build -w",
