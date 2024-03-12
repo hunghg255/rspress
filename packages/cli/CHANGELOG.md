@@ -1,5 +1,83 @@
 # rspress
 
+## 1.14.0
+
+### Patch Changes
+
+- Updated dependencies [7d1103c]
+- Updated dependencies [4fd420d]
+- Updated dependencies [3860b74]
+- Updated dependencies [0ea38be]
+- Updated dependencies [f401506]
+- Updated dependencies [cfc0842]
+  - @rspress/core@1.14.0
+  - @rspress/shared@1.14.0
+
+## 1.13.2
+
+### Patch Changes
+
+- Updated dependencies [f07b64f]
+  - @rspress/core@1.13.2
+  - @rspress/shared@1.13.2
+
+## 1.13.1
+
+### Patch Changes
+
+- Updated dependencies [294eeeb]
+- Updated dependencies [75dff6b]
+  - @rspress/core@1.13.1
+  - @rspress/shared@1.13.1
+
+## 1.13.0
+
+### Patch Changes
+
+- Updated dependencies [4b8fcd2]
+- Updated dependencies [74751bd]
+- Updated dependencies [7e95dcd]
+- Updated dependencies [51d8ae9]
+- Updated dependencies [90c5586]
+- Updated dependencies [51d8ae9]
+  - @rspress/shared@1.13.0
+  - @rspress/core@1.13.0
+
+## 1.12.3
+
+### Patch Changes
+
+- @rspress/core@1.12.3
+- @rspress/shared@1.12.3
+
+## 1.12.2
+
+### Patch Changes
+
+- Updated dependencies [4725cba]
+- Updated dependencies [4725cba]
+  - @rspress/core@1.12.2
+  - @rspress/shared@1.12.2
+
+## 1.12.1
+
+### Patch Changes
+
+- @rspress/core@1.12.1
+- @rspress/shared@1.12.1
+
+## 1.12.0
+
+### Patch Changes
+
+- Updated dependencies [d697778]
+- Updated dependencies [51f5541]
+- Updated dependencies [24c03fc]
+- Updated dependencies [24c03fc]
+- Updated dependencies [24c03fc]
+  - @rspress/shared@1.12.0
+  - @rspress/core@1.12.0
+
 ## 1.11.2
 
 ### Patch Changes

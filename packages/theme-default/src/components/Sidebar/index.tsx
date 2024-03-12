@@ -3,20 +3,26 @@ import {
   NormalizedSidebarGroup,
   SidebarItem as ISidebarItem,
   SidebarDivider as ISidebarDivider,
+  SidebarSectionHeader as ISidebarSectionHeader,
   normalizeSlash,
 } from '@rspress/shared';
 import { routes } from 'virtual-routes';
 import { matchRoutes, useLocation, removeBase } from '@rspress/runtime';
-import {
-  isActive,
-  useDisableNav,
-  useLocaleSiteData,
-  useSidebarData,
-} from '../../logic';
+import { isActive, useLocaleSiteData, useSidebarData } from '../../logic';
 import { NavBarTitle } from '../Nav/NavBarTitle';
 import styles from './index.module.scss';
 import { SidebarItem } from './SidebarItem';
 import { SidebarDivider } from './SidebarDivider';
+import { UISwitchResult } from '#theme/logic/useUISwitch';
+import { SidebarSectionHeader } from './SidebarSectionHeader';
+
+const isSidebarDivider = (item: NormalizedSidebarGroup | ISidebarItem | ISidebarDivider | ISidebarSectionHeader): item is ISidebarDivider => {
+  return 'dividerType' in item;
+}
+
+const isSidebarSectionHeader = (item: NormalizedSidebarGroup | ISidebarItem | ISidebarDivider | ISidebarSectionHeader): item is ISidebarSectionHeader => {
+  return 'sectionHeaderText' in item;
+}
 
 export interface SidebarItemProps {
   id: string;
@@ -36,6 +42,7 @@ interface Props {
   isSidebarOpen?: boolean;
   beforeSidebar?: React.ReactNode;
   afterSidebar?: React.ReactNode;
+  uiSwitch?: UISwitchResult;
 }
 
 export const highlightTitleStyle = {
@@ -52,17 +59,16 @@ export let matchCache: WeakMap<
 > = new WeakMap();
 
 export function SideBar(props: Props) {
-  const { isSidebarOpen, beforeSidebar, afterSidebar } = props;
+  const { isSidebarOpen, beforeSidebar, afterSidebar, uiSwitch } = props;
   const { items: rawSidebarData } = useSidebarData();
   const localesData = useLocaleSiteData();
   const { pathname: rawPathname } = useLocation();
-
   const langRoutePrefix = normalizeSlash(localesData.langRoutePrefix || '');
-  const [hideNavbar] = useDisableNav();
   const [sidebarData, setSidebarData] = useState<
     (ISidebarDivider | ISidebarItem | NormalizedSidebarGroup)[]
   >(rawSidebarData.filter(Boolean).flat());
   const pathname = decodeURIComponent(rawPathname);
+
   useEffect(() => {
     if (rawSidebarData === sidebarData) {
       return;
@@ -125,58 +131,66 @@ export function SideBar(props: Props) {
       route.preload();
     }
   };
+  const renderItem = (item: NormalizedSidebarGroup | ISidebarItem | ISidebarDivider | ISidebarSectionHeader, index: number) => {
+    if (isSidebarDivider(item)) {
+      return (
+        <SidebarDivider
+          key={index}
+          depth={0}
+          dividerType={item.dividerType}
+        />
+      );
+    }
+
+    if (isSidebarSectionHeader(item)) {
+      return (
+        <SidebarSectionHeader
+          key={index}
+          sectionHeaderText={item.sectionHeaderText}
+          tag={item.tag}
+        />
+      );
+    }
+
+    return (
+      <SidebarItem
+        id={String(index)}
+        item={item}
+        depth={0}
+        activeMatcher={activeMatcher}
+        key={index}
+        collapsed={(item as NormalizedSidebarGroup).collapsed ?? true}
+        setSidebarData={setSidebarData}
+        preloadLink={preloadLink}
+      />
+    );
+  }
   return (
     <aside
       className={`${styles.sidebar} rspress-sidebar ${
         isSidebarOpen ? styles.open : ''
       }`}
     >
-      {hideNavbar ? null : (
-        <div className={styles.navTitleMask}>
-          <NavBarTitle />
-        </div>
-      )}
-      <div className={`mt-1 ${styles.sidebarContent}`}>
-        <div
-          className="rspress-scrollbar"
-          style={{
-            maxHeight: 'calc(100vh - var(--rp-nav-height) - 8px)',
-            overflow: 'auto',
-          }}
-        >
-          <nav className="pb-2">
-            {beforeSidebar}
-            {sidebarData.map(
-              (
-                item: NormalizedSidebarGroup | ISidebarItem | ISidebarDivider,
-                index: number,
-              ) =>
-                'dividerType' in item ? (
-                  <SidebarDivider
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={index}
-                    depth={0}
-                    dividerType={item.dividerType}
-                  />
-                ) : (
-                  <SidebarItem
-                    id={String(index)}
-                    item={item}
-                    depth={0}
-                    activeMatcher={activeMatcher}
-                    // The siderbarData is stable, so it's safe to use index as key
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={index}
-                    collapsed={
-                      (item as NormalizedSidebarGroup).collapsed ?? true
-                    }
-                    setSidebarData={setSidebarData}
-                    preloadLink={preloadLink}
-                  />
-                ),
-            )}
-            {afterSidebar}
-          </nav>
+      <div className={`${styles.sidebarContainer}`}>
+        {!uiSwitch.showNavbar ? null : (
+          <div className={styles.navTitleMask}>
+            <NavBarTitle />
+          </div>
+        )}
+        <div className={`mt-1 ${styles.sidebarContent}`}>
+          <div
+            className="rspress-scrollbar"
+            style={{
+              maxHeight: 'calc(100vh - var(--rp-nav-height) - 8px)',
+              overflow: 'auto',
+            }}
+          >
+            <nav className="pb-2">
+              {beforeSidebar}
+              {sidebarData.map(renderItem)}
+              {afterSidebar}
+            </nav>
+          </div>
         </div>
       </div>
     </aside>

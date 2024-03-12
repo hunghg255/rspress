@@ -160,7 +160,7 @@ export type Image = string | { src: string; alt?: string };
 
 // sidebar -------------------------------------------------------------------
 export interface Sidebar {
-  [path: string]: (SidebarGroup | SidebarItem | SidebarDivider)[];
+  [path: string]: (SidebarGroup | SidebarItem | SidebarDivider | SidebarSectionHeader)[];
 }
 
 export interface SidebarGroup {
@@ -170,11 +170,28 @@ export interface SidebarGroup {
   items: (SidebarItem | SidebarDivider | SidebarGroup | string)[];
   collapsible?: boolean;
   collapsed?: boolean;
+  /**
+   * For hmr usage in development
+   */
+  _fileKey?: string;
 }
 
-export type SidebarItem = { text: string; link: string; tag?: string };
+export type SidebarItem = {
+  text: string;
+  link: string;
+  tag?: string;
+  /**
+   * For hmr usage in development
+   */
+  _fileKey?: string;
+};
 
 export type SidebarDivider = { dividerType: 'dashed' | 'solid' };
+
+export type SidebarSectionHeader = {
+  sectionHeaderText: string;
+  tag?: string;
+};
 
 // edit link -----------------------------------------------------------------
 

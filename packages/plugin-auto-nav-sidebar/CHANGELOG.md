@@ -1,5 +1,69 @@
 # @rspress/plugin-auto-sidebar
 
+## 1.14.0
+
+### Patch Changes
+
+- f401506: feat: support section header
+- b95368e: fix: frontmatter.title priority is higher than h1 title
+- Updated dependencies [f401506]
+  - @rspress/shared@1.14.0
+
+## 1.13.2
+
+### Patch Changes
+
+- @rspress/shared@1.13.2
+
+## 1.13.1
+
+### Patch Changes
+
+- @rspress/shared@1.13.1
+
+## 1.13.0
+
+### Patch Changes
+
+- 4b8fcd2: fix: support external link in nav
+- 51d8ae9: fix: avoid error in auto nav sidebar plugin
+- Updated dependencies [4b8fcd2]
+  - @rspress/shared@1.13.0
+
+## 1.12.3
+
+### Patch Changes
+
+- 8abf9b8: fix: avoid error which caught by type divider
+  - @rspress/shared@1.12.3
+
+## 1.12.2
+
+### Patch Changes
+
+- @rspress/shared@1.12.2
+
+## 1.12.1
+
+### Patch Changes
+
+- @rspress/shared@1.12.1
+
+## 1.12.0
+
+### Patch Changes
+
+- 710ca6a: fix: use logical OR instead of nullish coalescing when label is empty
+- 24c03fc: fix: update sidebar after h1 change
+- 24c03fc: feat: trigger auto page reload after page meta changed
+- 24c03fc: fix: doc fragments' headers disappeared in development
+- Updated dependencies [d697778]
+- Updated dependencies [51f5541]
+- Updated dependencies [24c03fc]
+- Updated dependencies [24c03fc]
+- Updated dependencies [24c03fc]
+  - @rspress/shared@1.12.0
+
 ## 1.11.2
 
 ### Patch Changes

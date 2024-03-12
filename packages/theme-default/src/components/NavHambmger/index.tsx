@@ -1,9 +1,10 @@
 import { Fragment } from 'react';
 import type { SiteData, DefaultThemeConfig } from '@rspress/shared';
+import SmallMenu from '@theme-assets/small-menu';
 import { NavScreen } from '../NavScreen';
 import { useNavScreen } from '../../logic/useNav';
-import SmallMenu from '../../assets/small-menu.svg';
 import styles from './index.module.scss';
+import { SvgWrapper } from '../SvgWrapper';
 
 interface Props {
   siteData: SiteData<DefaultThemeConfig>;
@@ -27,7 +28,7 @@ export function NavHamburger(props: Props) {
           styles.navHamburger
         } text-gray-500`}
       >
-        <SmallMenu fill="currentColor" />
+        <SvgWrapper icon={SmallMenu} fill="currentColor" />
       </button>
     </Fragment>
   );

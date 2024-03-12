@@ -5,14 +5,15 @@ import { debounce, groupBy } from 'lodash-es';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import * as userSearchHooks from 'virtual-search-hooks';
+import CloseSvg from '@theme-assets/close';
+import LoadingSvg from '@theme-assets/loading';
+import SearchSvg from '@theme-assets/search';
+import { SvgWrapper } from '../SvgWrapper';
 import { useLocaleSiteData } from '../../logic/useLocaleSiteData';
 import { getSidebarGroupData } from '../../logic/useSidebarData';
 import { Tab, Tabs } from '../Tabs';
 import { NoSearchResult } from './NoSearchResult';
 import { SuggestItem } from './SuggestItem';
-import CloseSvg from './assets/close.svg';
-import LoadingSvg from './assets/loading.svg';
-import SearchSvg from './assets/search.svg';
 import styles from './index.module.scss';
 import { PageSearcher } from './logic/search';
 import type {
@@ -43,6 +44,17 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
   const [initing, setIniting] = useState(true);
   const [currentSuggestionIndex, setCurrentSuggestionIndex] = useState(0);
   const pageSearcherRef = useRef<PageSearcher | null>(null);
+  const searchResultRef = useRef<HTMLInputElement | null>(null);
+
+  // only scroll after keydown arrow up and arrow down.
+  const [canScroll, setCanScroll] = useState(false);
+  const scrollTo = (top: number) => {
+    if (canScroll) {
+      searchResultRef?.current?.scrollTo({
+        top,
+      });
+    }
+  };
   const {
     siteData,
     page: { lang },
@@ -74,7 +86,10 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
       extractGroupName,
     });
     pageSearcherRef.current = pageSearcher;
-    await pageSearcherRef.current.init();
+    await Promise.all([
+      pageSearcherRef.current.init(),
+      new Promise(resolve => setTimeout(resolve, 1000)),
+    ]);
     setIniting(false);
     const query = searchInputRef.current?.value;
     if (query) {
@@ -99,6 +114,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
               currentSuggestions &&
               currentRenderType === RenderType.Default
             ) {
+              setCanScroll(true);
               setCurrentSuggestionIndex(
                 (currentSuggestionIndex + 1) % currentSuggestions.length,
               );
@@ -110,6 +126,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
             e.preventDefault();
             if (currentRenderType === RenderType.Default) {
               const currentSuggestionsLength = currentSuggestions.length;
+              setCanScroll(true);
               setCurrentSuggestionIndex(
                 (currentSuggestionIndex - 1 + currentSuggestionsLength) %
                   currentSuggestionsLength,
@@ -181,9 +198,8 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
         }
       }
 
-      const defaultSearchResult = await pageSearcherRef.current?.match(
-        newQuery,
-      );
+      const defaultSearchResult =
+        await pageSearcherRef.current?.match(newQuery);
 
       if (defaultSearchResult) {
         searchResult.push(...defaultSearchResult);
@@ -201,7 +217,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
                 ({
                   renderType: RenderType.Custom,
                   ...item,
-                } as CustomMatchResult),
+                }) as CustomMatchResult,
             ),
           );
         }
@@ -310,15 +326,18 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
                   return (
                     <SuggestItem
                       key={`${suggestion.title}-${suggestionIndex}`}
+                      suggestionIndex={suggestionIndex}
                       suggestion={suggestion}
                       isCurrent={suggestionIndex === currentSuggestionIndex}
                       setCurrentSuggestionIndex={() => {
+                        setCanScroll(false);
                         setCurrentSuggestionIndex(suggestionIndex);
                       }}
                       closeSearch={() => setFocused(false)}
                       inCurrentDocIndex={
                         currentSuggestions === searchResult[0].result
                       }
+                      scrollTo={scrollTo}
                     />
                   );
                 })}
@@ -345,7 +364,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
               <div className="flex items-center">
                 <div className={styles.inputForm}>
                   <label>
-                    <SearchSvg />
+                    <SvgWrapper icon={SearchSvg} />
                   </label>
                   <input
                     className={styles.input}
@@ -357,7 +376,8 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
                     onChange={e => handleQueryChange(e.target.value)}
                   />
                   <label>
-                    <CloseSvg
+                    <SvgWrapper
+                      icon={CloseSvg}
                       className={styles.close}
                       onClick={e => {
                         if (searchInputRef.current) {
@@ -385,14 +405,17 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
               </div>
 
               {query ? (
-                <div className={`${styles.searchHits}  rspress-scrollbar`}>
+                <div
+                  className={`${styles.searchHits}  rspress-scrollbar`}
+                  ref={searchResultRef}
+                >
                   {renderSearchResult(searchResult, search)}
                 </div>
               ) : null}
               {initing && (
                 <div className="flex-center">
                   <div className="p-2 text-sm">
-                    <LoadingSvg />
+                    <SvgWrapper icon={LoadingSvg} />
                   </div>
                 </div>
               )}

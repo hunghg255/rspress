@@ -1,16 +1,15 @@
 import { join } from 'path';
 import net from 'node:net';
-import { type RouteMeta, type RspressPlugin } from '@rspress/shared';
-import { createRsbuild } from '@rsbuild/core';
+import { type RouteMeta, type RspressPlugin, removeTrailingSlash } from '@rspress/shared';
+import { type RsbuildConfig, createRsbuild, mergeRsbuildConfig } from '@rsbuild/core';
 import { pluginSolid } from '@rsbuild/plugin-solid';
 import { pluginBabel } from '@rsbuild/plugin-babel';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { isEqual, cloneDeep } from 'lodash';
-import { remarkCodeToDemo } from './remarkPlugin';
+import { remarkCodeToDemo, demos } from './remarkPlugin';
 import { staticPath } from './constant';
 import type { Options, StartServerResult } from './types';
 import { generateEntry } from './generate-entry';
-import { demoRuntimeModule, demos } from './virtual-module';
 
 // global variables which need to be initialized in plugin
 let routeMeta: RouteMeta[];
@@ -30,6 +29,7 @@ export function pluginPreview(options?: Options): RspressPlugin {
     devPort = 7890,
     framework = 'react',
     position = iframePosition,
+    builderConfig = {},
   } = iframeOptions;
   const globalUIComponents =
     iframePosition === 'fixed'
@@ -38,6 +38,7 @@ export function pluginPreview(options?: Options): RspressPlugin {
   const getRouteMeta = () => routeMeta;
   let lastDemos: typeof demos;
   let devServer: StartServerResult;
+  let clientConfig: RsbuildConfig;
   const port = devPort;
   return {
     name: '@rspress/plugin-preview',
@@ -83,8 +84,9 @@ export function pluginPreview(options?: Options): RspressPlugin {
       if (Object.keys(sourceEntry).length === 0) {
         return;
       }
-      const rsbuildInstance = await createRsbuild({
-        rsbuildConfig: {
+      const { html, source, output, performance } = clientConfig ?? {};
+      const rsbuildConfig = mergeRsbuildConfig(
+        {
           dev: {
             progressBar: false,
           },
@@ -94,24 +96,28 @@ export function pluginPreview(options?: Options): RspressPlugin {
             strictPort: true,
           },
           performance: {
+            ...performance,
             printFileSize: false,
           },
+          html,
           source: {
+            ...source,
             entry: sourceEntry,
           },
           output: {
+            ...output,
+            assetPrefix: output?.assetPrefix ? `${removeTrailingSlash(output.assetPrefix)}/~demo` : '/~demo',
             distPath: {
               root: outDir,
             },
-          },
-          tools: {
-            rspack: {
-              output: {
-                publicPath: '/~demo',
-              },
-            },
+            // not copy files again
+            copy: undefined,
           },
         },
+        builderConfig,
+      );
+      const rsbuildInstance = await createRsbuild({
+        rsbuildConfig,
       });
       if (framework === 'solid') {
         rsbuildInstance.addPlugins([
@@ -135,9 +141,6 @@ export function pluginPreview(options?: Options): RspressPlugin {
         include: [join(__dirname, '..')],
       },
       tools: {
-        rspack: {
-          plugins: [demoRuntimeModule],
-        },
         bundlerChain(chain) {
           chain.module
             .rule('Raw')
@@ -152,6 +155,12 @@ export function pluginPreview(options?: Options): RspressPlugin {
         {
           name: 'close-demo-server',
           setup: api => {
+            api.modifyRsbuildConfig(config => {
+              if (config.output?.targets?.every(target => target ==='web')) {
+                // client build config
+                clientConfig = config;
+              }
+            })
             api.onCloseDevServer(async () => {
               await devServer?.server?.close();
             });

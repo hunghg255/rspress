@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
 import { usePageData } from '@rspress/runtime';
-import IconWrap from '../../../../assets/wrap.svg';
-import IconWrapped from '../../../../assets/wrapped.svg';
+import IconWrap from '@theme-assets/wrap';
+import IconWrapped from '@theme-assets/wrapped';
 import styles from './index.module.scss';
 import { PrismSyntaxHighlighter } from './PrismSytaxHighlighter';
 import { CopyCodeButton } from './CopyCodeButton';
+import { SvgWrapper } from '#theme/components/SvgWrapper';
 
 export interface CodeProps {
   children: string;
@@ -61,8 +62,8 @@ export function Code(props: CodeProps) {
           className={styles.codeWrapButton}
           onClick={() => toggleCodeWrap(wrapButtonRef.current)}
         >
-          <IconWrapped className={styles.iconWrapped} />
-          <IconWrap className={styles.iconWrap} />
+          <SvgWrapper icon={IconWrapped} className={styles.iconWrapped} />
+          <SvgWrapper icon={IconWrap} className={styles.iconWrap} />
         </button>
         <CopyCodeButton codeBlockRef={codeBlockRef} />
       </div>

@@ -1,17 +1,21 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useLocation } from '@rspress/runtime';
-import MenuIcon from '../../assets/menu.svg';
-import ArrowRight from '../../assets/arrow-right.svg';
+import MenuIcon from '@theme-assets/menu';
+import ArrowRight from '@theme-assets/arrow-right';
 import { SideBar } from '../Sidebar';
 import './index.scss';
 import { Toc } from '../Toc';
+import { UISwitchResult } from '#theme/logic/useUISwitch';
+import { SvgWrapper } from '../SvgWrapper';
 
 export function SideMenu({
   beforeSidebar,
   afterSidebar,
+  uiSwitch,
 }: {
   beforeSidebar?: React.ReactNode;
   afterSidebar?: React.ReactNode;
+  uiSwitch?: UISwitchResult;
 }) {
   const [isSidebarOpen, setSidebarIsOpen] = useState<boolean>(false);
   const [isTocOpen, setIsTocOpen] = useState<boolean>(false);
@@ -53,7 +57,7 @@ export function SideMenu({
       <div className="rspress-sidebar-menu">
         <button onClick={openSidebar} className="flex-center">
           <div className="text-md mr-2">
-            <MenuIcon />
+            <SvgWrapper icon={MenuIcon} />
           </div>
           <span className="text-sm">Menu</span>
         </button>
@@ -63,7 +67,7 @@ export function SideMenu({
         >
           <span className="text-sm">On this page</span>
           <div className="text-md mr-2">
-            <ArrowRight />
+            <SvgWrapper icon={ArrowRight} />
           </div>
         </button>
         <div
@@ -81,6 +85,7 @@ export function SideMenu({
         isSidebarOpen={isSidebarOpen}
         beforeSidebar={beforeSidebar}
         afterSidebar={afterSidebar}
+        uiSwitch={uiSwitch}
       />
       {isSidebarOpen ? (
         <div

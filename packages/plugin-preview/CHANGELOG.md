@@ -1,5 +1,79 @@
 # @rspress/plugin-preview
 
+## 1.14.0
+
+### Minor Changes
+
+- 300c478: feat: add support for custom iframe buildConfig
+
+### Patch Changes
+
+- a28bb78: fix: remove virtual module plugin and use pageMeta in mdx loader
+- 55fe1aa: fix: modernjs plugin alias problem in iframe
+- 23f13aa: fix: add theme to preview plugin dep and import theme css
+- 070e96b: fix: keep code element src prop if it is not a relative path
+- Updated dependencies [0953263]
+- Updated dependencies [b620be0]
+- Updated dependencies [806316c]
+- Updated dependencies [7b6eea0]
+- Updated dependencies [6e8a6a8]
+- Updated dependencies [f401506]
+- Updated dependencies [cfc0842]
+- Updated dependencies [dfe3bb2]
+- Updated dependencies [0903f7e]
+  - @rspress/theme-default@1.14.0
+  - @rspress/shared@1.14.0
+
+## 1.13.2
+
+### Patch Changes
+
+- @rspress/shared@1.13.2
+
+## 1.13.1
+
+### Patch Changes
+
+- @rspress/shared@1.13.1
+
+## 1.13.0
+
+### Patch Changes
+
+- Updated dependencies [4b8fcd2]
+  - @rspress/shared@1.13.0
+
+## 1.12.3
+
+### Patch Changes
+
+- @rspress/shared@1.12.3
+
+## 1.12.2
+
+### Patch Changes
+
+- @rspress/shared@1.12.2
+
+## 1.12.1
+
+### Patch Changes
+
+- @rspress/shared@1.12.1
+
+## 1.12.0
+
+### Patch Changes
+
+- 760027b: fix: fix theme style issues.
+- 0861d45: fix(plugin-preview): support rspress restart
+- Updated dependencies [d697778]
+- Updated dependencies [51f5541]
+- Updated dependencies [24c03fc]
+- Updated dependencies [24c03fc]
+- Updated dependencies [24c03fc]
+  - @rspress/shared@1.12.0
+
 ## 1.11.2
 
 ### Patch Changes

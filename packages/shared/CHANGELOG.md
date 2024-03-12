@@ -1,5 +1,44 @@
 # @rspress/shared
 
+## 1.14.0
+
+### Patch Changes
+
+- f401506: feat: support section header
+
+## 1.13.2
+
+## 1.13.1
+
+## 1.13.0
+
+### Patch Changes
+
+- 4b8fcd2: fix: support external link in nav
+
+## 1.12.3
+
+## 1.12.2
+
+## 1.12.1
+
+## 1.12.0
+
+### Minor Changes
+
+- d697778: feat(theme-default): Scroll to top button on docs | enableScrollToTop
+  chore(docs): weixin -> wechat
+- 51f5541: feat(presetIcons): new social platform for social links - X
+  feat(SourceCode): support for gitlab platform for button
+  add(assets): new gitlab vector
+  feat(SocialLinkIcon): Added new social icon type - X
+
+### Patch Changes
+
+- 24c03fc: fix: update sidebar after h1 change
+- 24c03fc: feat: trigger auto page reload after page meta changed
+- 24c03fc: fix: doc fragments' headers disappeared in development
+
 ## 1.11.2
 
 ### Patch Changes

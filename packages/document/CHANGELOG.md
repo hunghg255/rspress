@@ -1,5 +1,39 @@
 # @rspress/docs
 
+## 1.14.0
+
+### Patch Changes
+
+- 0953263: feat: support Badge component
+- f401506: feat: support section header
+
+## 1.13.2
+
+## 1.13.1
+
+## 1.13.0
+
+### Patch Changes
+
+- f426d2f: feat(internal-components): New Steps Component!
+  patch(docs): Add documentation for Steps Component!
+
+## 1.12.3
+
+## 1.12.2
+
+## 1.12.1
+
+## 1.12.0
+
+### Patch Changes
+
+- 88e7eae: feat: add afterDocFooter slot for custom theme
+- d697778: feat(theme-default): Scroll to top button on docs | enableScrollToTop
+  chore(docs): weixin -> wechat
+- d1fda14: fix(404): tried to configure 404 page on netlify hosting for rspress docs
+- c429464: fix(theme-default): ui switch query
+
 ## 1.11.2
 
 ### Patch Changes

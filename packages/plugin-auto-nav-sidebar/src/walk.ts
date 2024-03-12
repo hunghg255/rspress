@@ -8,6 +8,8 @@ import {
   SidebarDivider,
   slash,
   withBase,
+  isExternalUrl,
+  SidebarSectionHeader,
 } from '@rspress/shared';
 import { NavMeta, SideMeta } from './type';
 import { detectFilePath, extractH1Title } from './utils';
@@ -15,6 +17,7 @@ import { detectFilePath, extractH1Title } from './utils';
 export async function scanSideMeta(
   workDir: string,
   rootDir: string,
+  docsDir: string,
   routePrefix: string,
 ) {
   const addRoutePrefix = (link: string) => `${routePrefix}${link}`;
@@ -53,7 +56,7 @@ export async function scanSideMeta(
     ).filter(Boolean) as SideMeta;
   }
 
-  const sidebarFromMeta: (SidebarGroup | SidebarItem | SidebarDivider)[] =
+  const sidebarFromMeta: (SidebarGroup | SidebarItem | SidebarDivider | SidebarSectionHeader)[] =
     await Promise.all(
       sideMeta.map(async metaItem => {
         if (typeof metaItem === 'string') {
@@ -61,11 +64,11 @@ export async function scanSideMeta(
             path.resolve(workDir, metaItem),
             rootDir,
           );
+          const pureLink = `${relativePath}/${metaItem.replace(/\.mdx?$/, '')}`;
           return {
             text: title,
-            link: addRoutePrefix(
-              `${relativePath}/${metaItem.replace(/\.mdx?$/, '')}`,
-            ),
+            link: addRoutePrefix(pureLink),
+            _fileKey: path.relative(docsDir, path.join(workDir, metaItem)),
           };
         }
 
@@ -79,39 +82,42 @@ export async function scanSideMeta(
           tag,
           dashed,
         } = metaItem;
+        // when type is divider, name maybe undefined, and link is not used
+        const pureLink = `${relativePath}/${name?.replace(/\.mdx?$/, '')}`;
         if (type === 'file') {
           const title =
             label ||
             (await extractH1Title(path.resolve(workDir, name), rootDir));
+          const realPath = await detectFilePath(path.resolve(workDir, name));
           return {
             text: title,
-            link: addRoutePrefix(
-              `${relativePath}/${name.replace(/\.mdx?$/, '')}`,
-            ),
+            link: addRoutePrefix(pureLink),
             tag,
+            _fileKey: realPath ? path.relative(docsDir, realPath) : '',
           };
         } else if (type === 'dir') {
           const subDir = path.resolve(workDir, name);
-          const subSidebar = await scanSideMeta(subDir, rootDir, routePrefix);
-          let realPath = '';
-          try {
-            realPath = await detectFilePath(subDir);
-          } catch (e) {
-            // ignore
-          }
+          const subSidebar = await scanSideMeta(
+            subDir,
+            rootDir,
+            docsDir,
+            routePrefix,
+          );
+          const realPath = await detectFilePath(subDir);
           return {
             text: label,
             collapsible,
             collapsed,
             items: subSidebar,
-            link: realPath
-              ? addRoutePrefix(`${relativePath}/${name}`)
-              : undefined,
+            link: realPath ? addRoutePrefix(pureLink) : '',
             tag,
+            _fileKey: realPath ? path.relative(docsDir, realPath) : '',
           };
         } else if (type === 'divider') {
           return { dividerType: dashed ? 'dashed' : 'solid' };
-        } else {
+        } else if (type === 'section-header') {
+          return { sectionHeaderText: label, tag };
+        }else {
           return {
             text: label,
             link,
@@ -126,7 +132,11 @@ export async function scanSideMeta(
 
 // Start walking from the doc directory, scan the `_meta.json` file in each subdirectory
 // and generate the nav and sidebar config
-export async function walk(workDir: string, routePrefix = '/') {
+export async function walk(
+  workDir: string,
+  routePrefix = '/',
+  docsDir: string,
+) {
   // find the `_meta.json` file
   const rootMetaFile = path.resolve(workDir, '_meta.json');
   let navConfig: NavMeta | undefined;
@@ -140,12 +150,12 @@ export async function walk(workDir: string, routePrefix = '/') {
   navConfig.forEach(navItem => {
     if ('items' in navItem) {
       navItem.items.forEach(item => {
-        if ('link' in item) {
+        if ('link' in item && !isExternalUrl(item.link)) {
           item.link = withBase(item.link, routePrefix);
         }
       });
     }
-    if ('link' in navItem) {
+    if ('link' in navItem && !isExternalUrl(navItem.link)) {
       navItem.link = withBase(navItem.link, routePrefix);
     }
   });
@@ -161,6 +171,7 @@ export async function walk(workDir: string, routePrefix = '/') {
     sidebarConfig[sidebarGroupKey] = await scanSideMeta(
       path.join(workDir, subDir),
       workDir,
+      docsDir,
       routePrefix,
     );
   }

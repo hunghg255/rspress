@@ -1,5 +1,97 @@
 # @modern-js/plugin-rspress
 
+## 1.14.0
+
+### Patch Changes
+
+- 55fe1aa: fix: modernjs plugin alias problem in iframe
+- Updated dependencies [7d1103c]
+- Updated dependencies [a28bb78]
+- Updated dependencies [55fe1aa]
+- Updated dependencies [300c478]
+- Updated dependencies [4fd420d]
+- Updated dependencies [3860b74]
+- Updated dependencies [0ea38be]
+- Updated dependencies [f401506]
+- Updated dependencies [23f13aa]
+- Updated dependencies [070e96b]
+- Updated dependencies [cfc0842]
+  - @rspress/core@1.14.0
+  - @rspress/plugin-preview@1.14.0
+  - @rspress/plugin-api-docgen@1.14.0
+
+## 1.13.2
+
+### Patch Changes
+
+- Updated dependencies [f07b64f]
+  - @rspress/core@1.13.2
+  - @rspress/plugin-api-docgen@1.13.2
+  - @rspress/plugin-preview@1.13.2
+
+## 1.13.1
+
+### Patch Changes
+
+- Updated dependencies [294eeeb]
+- Updated dependencies [75dff6b]
+  - @rspress/core@1.13.1
+  - @rspress/plugin-api-docgen@1.13.1
+  - @rspress/plugin-preview@1.13.1
+
+## 1.13.0
+
+### Patch Changes
+
+- Updated dependencies [74751bd]
+- Updated dependencies [7e95dcd]
+- Updated dependencies [51d8ae9]
+- Updated dependencies [90c5586]
+- Updated dependencies [51d8ae9]
+  - @rspress/core@1.13.0
+  - @rspress/plugin-api-docgen@1.13.0
+  - @rspress/plugin-preview@1.13.0
+
+## 1.12.3
+
+### Patch Changes
+
+- @rspress/core@1.12.3
+- @rspress/plugin-api-docgen@1.12.3
+- @rspress/plugin-preview@1.12.3
+
+## 1.12.2
+
+### Patch Changes
+
+- Updated dependencies [4725cba]
+- Updated dependencies [4725cba]
+  - @rspress/core@1.12.2
+  - @rspress/plugin-api-docgen@1.12.2
+  - @rspress/plugin-preview@1.12.2
+
+## 1.12.1
+
+### Patch Changes
+
+- @rspress/core@1.12.1
+- @rspress/plugin-api-docgen@1.12.1
+- @rspress/plugin-preview@1.12.1
+
+## 1.12.0
+
+### Patch Changes
+
+- f27baa6: chore: update options
+- Updated dependencies [760027b]
+- Updated dependencies [0861d45]
+- Updated dependencies [24c03fc]
+- Updated dependencies [24c03fc]
+- Updated dependencies [24c03fc]
+  - @rspress/plugin-preview@1.12.0
+  - @rspress/core@1.12.0
+  - @rspress/plugin-api-docgen@1.12.0
+
 ## 1.11.2
 
 ### Patch Changes

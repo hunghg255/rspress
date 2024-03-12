@@ -4,7 +4,7 @@
 :root {
   --rp-nav-height: 72px;
   --rp-sidebar-width: 320px;
-  --rp-aside-width: 368px;
+  --rp-aside-width: 268px;
 }
 
 :root {
@@ -49,7 +49,7 @@
 }
 
 .dark {
-  --rp-c-bg: #000;
+  --rp-c-bg: #23272f;
   --rp-c-bg-soft: #2f2f2f;
   --rp-c-bg-mute: #3a3a3a;
   --rp-c-bg-alt: #000;

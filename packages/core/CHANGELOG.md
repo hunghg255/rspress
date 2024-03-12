@@ -1,5 +1,174 @@
 # @rspress/core
 
+## 1.14.0
+
+### Minor Changes
+
+- 7d1103c: perf: remove the builtin @rsbuild/plugin-svgr
+- 3860b74: feat: support custom pageMeta in js mdx loader
+
+### Patch Changes
+
+- 4fd420d: feat(deps): bump Rsbuild v0.4.11
+- 0ea38be: fix: doc fragment hmr invalid
+- f401506: feat: support section header
+- cfc0842: feat: support inline markdown in sidebar
+- Updated dependencies [0953263]
+- Updated dependencies [b620be0]
+- Updated dependencies [806316c]
+- Updated dependencies [7b6eea0]
+- Updated dependencies [6e8a6a8]
+- Updated dependencies [f401506]
+- Updated dependencies [cfc0842]
+- Updated dependencies [dfe3bb2]
+- Updated dependencies [b95368e]
+- Updated dependencies [0903f7e]
+  - @rspress/theme-default@1.14.0
+  - @rspress/plugin-container-syntax@1.14.0
+  - @rspress/plugin-auto-nav-sidebar@1.14.0
+  - @rspress/shared@1.14.0
+  - @rspress/plugin-last-updated@1.14.0
+  - @rspress/plugin-medium-zoom@1.14.0
+  - @rspress/runtime@1.14.0
+
+## 1.13.2
+
+### Patch Changes
+
+- f07b64f: fix(core): replace all import info in mdx
+- Updated dependencies [b13bcc4]
+  - @rspress/theme-default@1.13.2
+  - @rspress/plugin-auto-nav-sidebar@1.13.2
+  - @rspress/plugin-container-syntax@1.13.2
+  - @rspress/plugin-last-updated@1.13.2
+  - @rspress/plugin-medium-zoom@1.13.2
+  - @rspress/runtime@1.13.2
+  - @rspress/shared@1.13.2
+
+## 1.13.1
+
+### Patch Changes
+
+- 294eeeb: fix: add semicon judgement in flattenMdxContent
+- 75dff6b: feat: extract all CSS into a single file
+- Updated dependencies [baa2236]
+- Updated dependencies [a233e23]
+- Updated dependencies [9b02797]
+- Updated dependencies [ddb169b]
+- Updated dependencies [321c4c8]
+  - @rspress/theme-default@1.13.1
+  - @rspress/plugin-auto-nav-sidebar@1.13.1
+  - @rspress/plugin-container-syntax@1.13.1
+  - @rspress/plugin-last-updated@1.13.1
+  - @rspress/plugin-medium-zoom@1.13.1
+  - @rspress/runtime@1.13.1
+  - @rspress/shared@1.13.1
+
+## 1.13.0
+
+### Minor Changes
+
+- 7e95dcd: feat: add support for custom theme assets
+
+### Patch Changes
+
+- 74751bd: fix(core): remove global to avoid ambiguity in non-greedy match in flat mdx
+- 51d8ae9: fix: nested mdx imports build failed
+- 90c5586: fix(core): use alias to support custom theme, instead of detect
+- 51d8ae9: fix: location is not defined in ssg
+- Updated dependencies [f426d2f]
+- Updated dependencies [4b8fcd2]
+- Updated dependencies [4ae7bf1]
+- Updated dependencies [7e95dcd]
+- Updated dependencies [facceac]
+- Updated dependencies [51d8ae9]
+- Updated dependencies [51d8ae9]
+- Updated dependencies [2bffb37]
+- Updated dependencies [8fcf385]
+  - @rspress/theme-default@1.13.0
+  - @rspress/plugin-auto-nav-sidebar@1.13.0
+  - @rspress/shared@1.13.0
+  - @rspress/runtime@1.13.0
+  - @rspress/plugin-container-syntax@1.13.0
+  - @rspress/plugin-last-updated@1.13.0
+  - @rspress/plugin-medium-zoom@1.13.0
+
+## 1.12.3
+
+### Patch Changes
+
+- Updated dependencies [8abf9b8]
+  - @rspress/plugin-auto-nav-sidebar@1.12.3
+  - @rspress/plugin-container-syntax@1.12.3
+  - @rspress/plugin-last-updated@1.12.3
+  - @rspress/plugin-medium-zoom@1.12.3
+  - @rspress/runtime@1.12.3
+  - @rspress/shared@1.12.3
+  - @rspress/theme-default@1.12.3
+
+## 1.12.2
+
+### Patch Changes
+
+- 4725cba: fix: nested mdx imports build failed
+- 4725cba: fix: location is not defined in ssg
+- Updated dependencies [4725cba]
+  - @rspress/theme-default@1.12.2
+  - @rspress/plugin-auto-nav-sidebar@1.12.2
+  - @rspress/plugin-container-syntax@1.12.2
+  - @rspress/plugin-last-updated@1.12.2
+  - @rspress/plugin-medium-zoom@1.12.2
+  - @rspress/runtime@1.12.2
+  - @rspress/shared@1.12.2
+
+## 1.12.1
+
+### Patch Changes
+
+- Updated dependencies [5ea9055]
+  - @rspress/theme-default@1.12.1
+  - @rspress/plugin-auto-nav-sidebar@1.12.1
+  - @rspress/plugin-container-syntax@1.12.1
+  - @rspress/plugin-last-updated@1.12.1
+  - @rspress/plugin-medium-zoom@1.12.1
+  - @rspress/runtime@1.12.1
+  - @rspress/shared@1.12.1
+
+## 1.12.0
+
+### Minor Changes
+
+- 24c03fc: feat: trigger auto page reload after page meta changed
+
+### Patch Changes
+
+- 24c03fc: fix: update sidebar after h1 change
+- 24c03fc: fix: doc fragments' headers disappeared in development
+- Updated dependencies [1551705]
+- Updated dependencies [760027b]
+- Updated dependencies [88e7eae]
+- Updated dependencies [d697778]
+- Updated dependencies [e4508b5]
+- Updated dependencies [515d65c]
+- Updated dependencies [4a73062]
+- Updated dependencies [2e1550a]
+- Updated dependencies [710ca6a]
+- Updated dependencies [51f5541]
+- Updated dependencies [24c03fc]
+- Updated dependencies [24c03fc]
+- Updated dependencies [24c03fc]
+- Updated dependencies [c429464]
+- Updated dependencies [6212c89]
+- Updated dependencies [0ec1c5d]
+- Updated dependencies [42c78f4]
+  - @rspress/theme-default@1.12.0
+  - @rspress/shared@1.12.0
+  - @rspress/plugin-auto-nav-sidebar@1.12.0
+  - @rspress/plugin-container-syntax@1.12.0
+  - @rspress/plugin-last-updated@1.12.0
+  - @rspress/plugin-medium-zoom@1.12.0
+  - @rspress/runtime@1.12.0
+
 ## 1.11.2
 
 ### Patch Changes

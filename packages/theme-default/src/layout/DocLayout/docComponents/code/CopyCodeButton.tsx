@@ -1,8 +1,9 @@
 import { useRef, type MutableRefObject } from 'react';
 import copy from 'copy-to-clipboard';
-import IconCopy from '../../../../assets/copy.svg';
-import IconSuccess from '../../../../assets/success.svg';
+import IconCopy from '@theme-assets/copy';
+import IconSuccess from '@theme-assets/success';
 import styles from './index.module.scss';
+import { SvgWrapper } from '#theme/components/SvgWrapper';
 
 const timeoutIdMap: Map<HTMLElement, NodeJS.Timeout> = new Map();
 
@@ -51,8 +52,8 @@ export function CopyCodeButton({
       onClick={() => copyCode(codeBlockRef.current, copyButtonRef.current)}
       ref={copyButtonRef}
     >
-      <IconCopy className={styles.iconCopy} />
-      <IconSuccess className={styles.iconSuccess} />
+      <SvgWrapper icon={IconCopy} className={styles.iconCopy} />
+      <SvgWrapper icon={IconSuccess} className={styles.iconSuccess} />
     </button>
   );
 }

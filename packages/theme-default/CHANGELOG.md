@@ -1,5 +1,119 @@
 # @rspress/theme-default
 
+## 1.14.0
+
+### Patch Changes
+
+- 0953263: feat: support Badge component
+- b620be0: fix: useFullTextSearch hook not work
+- 806316c: chore: remove useless overflow-hidden style
+- 7b6eea0: chore: optimize dark mode style
+- 6e8a6a8: fix: adjust rspress doc max width
+- f401506: feat: support section header
+- cfc0842: feat: support inline markdown in sidebar
+- dfe3bb2: fix: implement svg icon wrapper
+- 0903f7e: correct style issue with lark svg icon
+- Updated dependencies [f401506]
+  - @rspress/shared@1.14.0
+  - @rspress/runtime@1.14.0
+
+## 1.13.2
+
+### Patch Changes
+
+- b13bcc4: fix(theme-default): make outline have a well width again
+  - @rspress/runtime@1.13.2
+  - @rspress/shared@1.13.2
+
+## 1.13.1
+
+### Patch Changes
+
+- baa2236: fix(style): overview links margin not work
+- a233e23: fix(theme-default): adjust sidebar menu z-index
+- 9b02797: fix(theme-default): doc container with full width.
+- ddb169b: perf: pre build svg in theme package
+- 321c4c8: chore: replace omitted svg import statement
+  - @rspress/runtime@1.13.1
+  - @rspress/shared@1.13.1
+
+## 1.13.0
+
+### Minor Changes
+
+- f426d2f: feat(internal-components): New Steps Component!
+  patch(docs): Add documentation for Steps Component!
+- 7e95dcd: feat: add support for custom theme assets
+
+### Patch Changes
+
+- facceac: fix: respect search flag on mobile devices
+- 51d8ae9: fix: location is not defined in ssg
+- 2bffb37: fix: update theme when change storage
+- 8fcf385: fix: add explicit height to social link icons, which is needed on Safari
+- Updated dependencies [4b8fcd2]
+- Updated dependencies [4ae7bf1]
+  - @rspress/shared@1.13.0
+  - @rspress/runtime@1.13.0
+
+## 1.12.3
+
+### Patch Changes
+
+- @rspress/runtime@1.12.3
+- @rspress/shared@1.12.3
+
+## 1.12.2
+
+### Patch Changes
+
+- 4725cba: fix: location is not defined in ssg
+  - @rspress/runtime@1.12.2
+  - @rspress/shared@1.12.2
+
+## 1.12.1
+
+### Patch Changes
+
+- 5ea9055: fix(theme-default): Fix collapsed space between last updated text and time
+  - @rspress/runtime@1.12.1
+  - @rspress/shared@1.12.1
+
+## 1.12.0
+
+### Minor Changes
+
+- d697778: feat(theme-default): Scroll to top button on docs | enableScrollToTop
+  chore(docs): weixin -> wechat
+
+### Patch Changes
+
+- 1551705: fix(doc-components): change code children to string
+- 760027b: fix: fix theme style issues.
+- 88e7eae: feat: add afterDocFooter slot for custom theme
+- e4508b5: fix: copyBtn Icons && updated wordWrapBtn animations for equality between both buttons
+- 515d65c: fix(theme-default): fix incorrect css variable name
+- 4a73062: feat: pass through HTMLAnchorElement props to Link component.
+- 2e1550a: fix(theme-default): private import not work in production
+- 51f5541: feat(presetIcons): new social platform for social links - X
+  feat(SourceCode): support for gitlab platform for button
+  add(assets): new gitlab vector
+  feat(SocialLinkIcon): Added new social icon type - X
+- 24c03fc: fix: update sidebar after h1 change
+- 24c03fc: feat: trigger auto page reload after page meta changed
+- 24c03fc: fix: doc fragments' headers disappeared in development
+- c429464: fix(theme-default): ui switch query
+- 6212c89: fix(tab-list):overflown tabs not showing on mobile fixed
+- 0ec1c5d: feat(theme-default): add DocLayout export
+- 42c78f4: feat(theme-default): set search index initing min time
+- Updated dependencies [d697778]
+- Updated dependencies [51f5541]
+- Updated dependencies [24c03fc]
+- Updated dependencies [24c03fc]
+- Updated dependencies [24c03fc]
+  - @rspress/shared@1.12.0
+  - @rspress/runtime@1.12.0
+
 ## 1.11.2
 
 ### Patch Changes
