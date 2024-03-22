@@ -2,4 +2,4 @@
 '@rspress/theme-default': patch
 ---
 
-fix: update nav when resize
+chore: remove #theme in source code

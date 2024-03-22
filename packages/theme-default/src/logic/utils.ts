@@ -15,11 +15,11 @@ export function isActive(
   }
   if (strict) {
     return isEqualPath(currentPath, targetLink);
-  } else {
-    return (
-      isEqualPath(currentPath, targetLink) || currentPath.startsWith(targetLink)
-    );
   }
+
+  return (
+    isEqualPath(currentPath, targetLink) || currentPath.startsWith(targetLink)
+  );
 }
 
 export function getLogoUrl(
@@ -35,7 +35,7 @@ export function getLogoUrl(
 }
 
 export function isMobileDevice() {
-  return window.innerWidth < 768;
+  return window.innerWidth <= 1024;
 }
 
 export function renderHtmlOrText(str?: string | number | null) {

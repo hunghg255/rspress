@@ -1,5 +1,9 @@
 # @rspress/shared
 
+## 1.15.1
+
+## 1.15.0
+
 ## 1.14.0
 
 ### Patch Changes

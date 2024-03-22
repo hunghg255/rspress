@@ -1,5 +1,23 @@
 # @modern-js/plugin-rspress
 
+## 1.15.1
+
+### Patch Changes
+
+- @rspress/core@1.15.1
+- @rspress/plugin-preview@1.15.1
+- @rspress/plugin-api-docgen@1.15.1
+
+## 1.15.0
+
+### Patch Changes
+
+- 0f97acf: fix: pre transform svg to component
+- Updated dependencies [59ff70b]
+  - @rspress/core@1.15.0
+  - @rspress/plugin-preview@1.15.0
+  - @rspress/plugin-api-docgen@1.15.0
+
 ## 1.14.0
 
 ### Patch Changes

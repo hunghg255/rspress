@@ -1,5 +1,41 @@
 # @rspress/core
 
+## 1.15.1
+
+### Patch Changes
+
+- Updated dependencies [9139dc3]
+- Updated dependencies [1f2febd]
+- Updated dependencies [ab88310]
+  - @rspress/theme-default@1.15.1
+  - @rspress/plugin-auto-nav-sidebar@1.15.1
+  - @rspress/plugin-container-syntax@1.15.1
+  - @rspress/plugin-last-updated@1.15.1
+  - @rspress/plugin-medium-zoom@1.15.1
+  - @rspress/runtime@1.15.1
+  - @rspress/shared@1.15.1
+
+## 1.15.0
+
+### Patch Changes
+
+- 59ff70b: chore: enable more lint rules
+- Updated dependencies [79a4142]
+- Updated dependencies [3b6aafe]
+- Updated dependencies [3b64c40]
+- Updated dependencies [2f6bda9]
+- Updated dependencies [52dc2e5]
+- Updated dependencies [e3359be]
+- Updated dependencies [915064f]
+- Updated dependencies [22487ef]
+  - @rspress/theme-default@1.15.0
+  - @rspress/plugin-medium-zoom@1.15.0
+  - @rspress/plugin-auto-nav-sidebar@1.15.0
+  - @rspress/plugin-container-syntax@1.15.0
+  - @rspress/plugin-last-updated@1.15.0
+  - @rspress/runtime@1.15.0
+  - @rspress/shared@1.15.0
+
 ## 1.14.0
 
 ### Minor Changes

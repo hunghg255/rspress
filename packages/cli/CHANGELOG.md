@@ -1,5 +1,22 @@
 # rspress
 
+## 1.15.1
+
+### Patch Changes
+
+- @rspress/core@1.15.1
+- @rspress/shared@1.15.1
+
+## 1.15.0
+
+### Patch Changes
+
+- cdc2342: fix: i18n json change won't trigger rebuild
+- 59ff70b: chore: enable more lint rules
+- Updated dependencies [59ff70b]
+  - @rspress/core@1.15.0
+  - @rspress/shared@1.15.0
+
 ## 1.14.0
 
 ### Patch Changes
