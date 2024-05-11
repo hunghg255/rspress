@@ -1,14 +1,19 @@
 import {
-  ComponentPropsWithRef,
-  ReactElement,
+  Children,
   ReactNode,
-  useContext,
+  ReactElement,
+  useMemo,
   useState,
+  useEffect,
+  useContext,
   forwardRef,
-  type ForwardRefExoticComponent,
   ForwardedRef,
+  isValidElement,
+  ComponentPropsWithRef,
+  type ForwardRefExoticComponent,
 } from 'react';
 import { TabDataContext } from '../../logic/TabDataContext';
+import { useStorageValue } from '../../logic/useStorageValue';
 import styles from './index.module.scss';
 
 type TabItem = {
@@ -41,31 +46,49 @@ const renderTab = (item: ReactNode | TabItem) => {
   return item;
 };
 
+export const groupIdPrefix = 'rspress.tabs.';
+
 export const Tabs: ForwardRefExoticComponent<TabsProps> = forwardRef(
   (props: TabsProps, ref: ForwardedRef<any>): ReactElement => {
     const {
       values,
       defaultValue,
       onChange,
-      children,
+      children: rawChildren,
       groupId,
       tabPosition = 'left',
       tabContainerClassName,
     } = props;
+    // remove "\n" character when write JSX element in multiple lines, use Children.toArray for Tabs with no Tab element
+    const children = Children.toArray(rawChildren).filter(
+      child => !(typeof child === 'string' && child.trim() === ''),
+    );
+
     let tabValues = values || [];
+
     if (tabValues.length === 0) {
-      tabValues = (children as ReactElement[]).map(child => ({
-        label: child.props?.label,
-        value: child.props?.value || child.props?.label,
-      }));
+      tabValues = Children.map(children, child => {
+        if (isValidElement(child)) {
+          return {
+            label: child.props?.label,
+            value: child.props?.value || child.props?.label,
+          };
+        }
+
+        return {
+          label: undefined,
+          value: undefined,
+        };
+      });
     }
+
     const { tabData, setTabData } = useContext(TabDataContext);
-    let defaultIndex = 0;
-    const needSync = groupId && tabData[groupId] !== undefined;
-    if (needSync) {
-      defaultIndex = tabData[groupId];
-    } else if (defaultValue) {
-      defaultIndex = tabValues.findIndex(item => {
+    const [activeIndex, setActiveIndex] = useState(() => {
+      if (defaultValue === undefined) {
+        return 0;
+      }
+
+      return tabValues.findIndex(item => {
         if (typeof item === 'string') {
           return item === defaultValue;
         }
@@ -74,8 +97,37 @@ export const Tabs: ForwardRefExoticComponent<TabsProps> = forwardRef(
         }
         return false;
       });
-    }
-    const [activeIndex, setActiveIndex] = useState(defaultIndex);
+    });
+
+    const [storageIndex, setStorageIndex] = useStorageValue(
+      `${groupIdPrefix}${groupId}`,
+      activeIndex,
+    );
+
+    const syncIndex = useMemo(() => {
+      if (groupId) {
+        if (tabData[groupId] !== undefined) {
+          return tabData[groupId];
+        }
+
+        return parseInt(storageIndex);
+      }
+
+      return activeIndex;
+    }, [tabData[groupId]]);
+
+    // sync when other browser page trigger update
+    useEffect(() => {
+      if (groupId) {
+        const correctIndex = parseInt(storageIndex);
+
+        if (syncIndex !== correctIndex) {
+          setTabData({ ...tabData, [groupId]: correctIndex });
+        }
+      }
+    }, [storageIndex]);
+
+    const currentIndex = groupId ? syncIndex : activeIndex;
 
     return (
       <div className={styles.container} ref={ref}>
@@ -94,15 +146,17 @@ export const Tabs: ForwardRefExoticComponent<TabsProps> = forwardRef(
                     // eslint-disable-next-line react/no-array-index-key
                     key={index}
                     className={`${styles.tab} ${
-                      activeIndex === index
+                      currentIndex === index
                         ? styles.selected
                         : styles.notSelected
                     }`}
                     onClick={() => {
                       onChange?.(index);
-                      setActiveIndex(index);
                       if (groupId) {
                         setTabData({ ...tabData, [groupId]: index });
+                        setStorageIndex(index);
+                      } else {
+                        setActiveIndex(index);
                       }
                     }}
                   >
@@ -113,7 +167,7 @@ export const Tabs: ForwardRefExoticComponent<TabsProps> = forwardRef(
             </div>
           ) : null}
         </div>
-        <div>{children[activeIndex]}</div>
+        <div>{Children.toArray(children)[currentIndex]}</div>
       </div>
     );
   },

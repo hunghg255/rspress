@@ -29,7 +29,7 @@ rspress build docs
 - Type: `string`
 - Default: `/`
 
-部署基路径。比如，如果你计划将你的站点部署到 `https://foo.github.io/bar/`，那么你应该将 `base` 设置为 `"/bar/"`：
+部署基础路径。比如，如果你计划将你的站点部署到 `https://foo.github.io/bar/`，那么你应该将 `base` 设置为 `"/bar/"`：
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from 'rspress/config';
@@ -42,7 +42,7 @@ export default defineConfig({
 ## title
 
 - Type: `string`
-- Default: `"Island"`
+- Default: `"Rspress"`
 
 站点标题。这个参数将被用作 HTML 页面的标题。例如：
 
@@ -86,7 +86,7 @@ export default defineConfig({
 
 框架会在 `public` 目录中找到你的图标，当然你也可以设置成一个 CDN 地址。
 
-## logo
+## logo \{#logo-1}
 
 - Type: `string | { dark: string; light: string }`
 - Default: `""`
@@ -113,6 +113,21 @@ export default defineConfig({
     dark: '/logo-dark.png',
     light: '/logo-light.png',
   },
+});
+```
+
+## logoText
+
+- Type: `string`
+- Default: `""`
+
+站点 logo 文字。这个文字将用作导航栏左上角的 logo 文字。例如：
+
+```ts title="rspress.config.ts"
+import { defineConfig } from 'rspress/config';
+
+export default defineConfig({
+  logoText: 'rspress',
 });
 ```
 
@@ -193,7 +208,9 @@ export default defineConfig({
 
 ## search
 
-- Type: `{ searchHooks: string }`
+- Type: `{ searchHooks: string; versioned: boolean; }`
+
+### searchHooks
 
 你可以通过 `searchHooks` 参数来增加搜索运行时钩子逻辑，比如：
 
@@ -209,6 +226,20 @@ export default defineConfig({
 ```
 
 关于具体的钩子逻辑，你可以阅读 [自定义搜索功能](/zh/guide/advanced/custom-search)。
+
+### versioned
+
+如果你配置了 `multiVersion`，可以使用 `versioned` 参数为文档的每个版本创建单独的搜索索引。开启该选项后，搜索将仅会查询当前所选版本对应的索引。
+
+```ts title="rspress.config.ts"
+import { defineConfig } from 'rspress/config';
+
+export default defineConfig({
+  search: {
+    versioned: true,
+  },
+});
+```
 
 ## globalUIComponents
 
@@ -284,12 +315,18 @@ import { defineConfig } from 'rspress/config';
 
 export default defineConfig({
   route: {
-    include: ['other-dir/**/*'],
+    include: ['other-dir/**/*.{md,mdx}'],
   },
 });
 ```
 
-> 注意：数组中的字符串支持 glob 模式。
+> 注意：数组中的字符串支持 glob 模式，填写的 glob 表达式应基于文档的 `root` 目录，并带上对应的 extensions 后缀。
+
+:::note
+
+我们更加推荐在自定义 Rspress 插件中使用 [addPages hook](plugin/system/plugin-api.html#addpages) 来在路由中添加一些额外的文件，这样可以更灵活且更合理地指定页面路由和文件路径/内容。
+
+:::
 
 ### route.exclude
 
@@ -308,7 +345,7 @@ export default defineConfig({
 });
 ```
 
-> 注意：数组中的字符串支持 glob 模式。
+> 注意：数组中的字符串支持 glob 模式，填写的 glob 表达式应基于文档的 `root` 目录。
 
 ### route.extensions
 

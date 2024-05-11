@@ -11,7 +11,7 @@ import {
   withBase,
   isEqualPath,
 } from '@rspress/runtime';
-import { useSidebarData } from '../../logic';
+import { renderInlineMarkdown, useSidebarData } from '../../logic';
 import { Link } from '@theme';
 import styles from './index.module.scss';
 
@@ -34,10 +34,11 @@ export function Overview(props: {
   content?: React.ReactNode;
   groups?: Group[];
   defaultGroupTitle?: string;
+  overviewHeaders?: number[];
 }) {
   const {
     siteData,
-    page: { routePath, title },
+    page: { routePath, title, frontmatter },
   } = usePageData();
   const { content, groups: customGroups, defaultGroupTitle = 'Others' } = props;
   const subFilter = (link: string) =>
@@ -56,12 +57,58 @@ export function Overview(props: {
     }
     return '';
   };
+  const findItemByRoutePath = (items, routePath, originalItems) => {
+    for (const item of items) {
+      if (withBase(item.link) === routePath) {
+        return [item];
+      }
+      if (item.items) {
+        const foundItem = findItemByRoutePath(
+          item.items,
+          routePath,
+          originalItems,
+        );
+        if (foundItem) {
+          return foundItem;
+        }
+      }
+    }
+    return originalItems;
+  };
   const { pages } = siteData;
   const overviewModules = pages.filter(page => subFilter(page.routePath));
-  const { items: overviewSidebarGroups } = useSidebarData() as {
+  let { items: overviewSidebarGroups } = useSidebarData() as {
     items: (NormalizedSidebarGroup | SidebarItem)[];
   };
-  function normalizeSidebarItem(item: NormalizedSidebarGroup | SidebarItem) {
+
+  if (overviewSidebarGroups[0].link !== routePath) {
+    overviewSidebarGroups = findItemByRoutePath(
+      overviewSidebarGroups,
+      routePath,
+      overviewSidebarGroups,
+    );
+  }
+
+  function normalizeSidebarItem(
+    item: SidebarItem | SidebarDivider | NormalizedSidebarGroup,
+    sidebarGroup?: NormalizedSidebarGroup,
+    frontmatter?: Record<string, unknown>,
+  ) {
+    if ('dividerType' in item) {
+      return item;
+    }
+    // do not display overview title in sub pages overview
+    if (
+      withBase(item.link) === `${routePath}index` &&
+      frontmatter?.overview === true
+    ) {
+      return false;
+    }
+    // props > frontmatter in single file > _meta.json config in a file > frontmatter in overview page > _meta.json config in sidebar
+    const overviewHeaders = props?.overviewHeaders ??
+      item.overviewHeaders ??
+      (frontmatter?.overviewHeaders as number[]) ??
+      sidebarGroup?.overviewHeaders ?? [2];
     // sidebar items link without base path
     const pageModule = overviewModules.find(m =>
       isEqualPath(m.routePath, withBase(item.link || '')),
@@ -70,9 +117,16 @@ export function Overview(props: {
     return {
       ...item,
       link,
-      headers: pageModule?.toc?.filter(header => header.depth === 2) || [],
+      headers:
+        pageModule?.toc?.filter(header =>
+          overviewHeaders.some(depth => header.depth === depth),
+        ) || [],
     };
   }
+
+  const isSingleFile = (item: SidebarItem | NormalizedSidebarGroup) =>
+    !('items' in item) && 'link' in item;
+
   const groups =
     customGroups ??
     useMemo(() => {
@@ -84,29 +138,48 @@ export function Overview(props: {
                 .length > 0
             );
           }
+          if (
+            isSingleFile(sidebarGroup) &&
+            subFilter(getChildLink(sidebarGroup))
+          ) {
+            return true;
+          }
           return false;
         })
-        .map(sidebarGroup => ({
-          name: sidebarGroup.text || '',
-          items: (sidebarGroup as NormalizedSidebarGroup).items
-            .map(normalizeSidebarItem)
-            .filter(Boolean),
-        })) as Group[];
-      const singleLinks = overviewSidebarGroups.filter(
-        item => !('items' in item) && subFilter(item.link),
-      );
-      return [
-        ...group,
-        ...(singleLinks.length > 0
-          ? [
-              {
-                name: defaultGroupTitle,
-                items: singleLinks.map(normalizeSidebarItem),
-              },
-            ]
-          : []),
-      ];
-    }, [overviewSidebarGroups]);
+        .map(sidebarGroup => {
+          let items = [];
+          if ((sidebarGroup as NormalizedSidebarGroup)?.items) {
+            items = (sidebarGroup as NormalizedSidebarGroup)?.items
+              ?.map(item =>
+                normalizeSidebarItem(
+                  item,
+                  sidebarGroup as NormalizedSidebarGroup,
+                  frontmatter,
+                ),
+              )
+              .filter(Boolean);
+          } else if (isSingleFile(sidebarGroup)) {
+            items = [
+              normalizeSidebarItem(
+                {
+                  link: sidebarGroup.link,
+                  text: sidebarGroup.text || '',
+                  tag: sidebarGroup.tag,
+                  _fileKey: sidebarGroup._fileKey,
+                  overviewHeaders: sidebarGroup.overviewHeaders,
+                },
+                undefined,
+                frontmatter,
+              ),
+            ];
+          }
+          return {
+            name: sidebarGroup.text || '',
+            items,
+          };
+        }) as Group[];
+      return group;
+    }, [overviewSidebarGroups, routePath, frontmatter]);
 
   return (
     <div className="overview-index mx-auto px-8">
@@ -122,7 +195,7 @@ export function Overview(props: {
           {group.name === defaultGroupTitle && groups.length === 1 ? (
             <h2 style={{ paddingTop: 0 }}></h2>
           ) : (
-            <h2>{group.name}</h2>
+            <h2>{renderInlineMarkdown(group.name)}</h2>
           )}
 
           <div className={styles.overviewGroups}>
@@ -130,7 +203,9 @@ export function Overview(props: {
               <div className={styles.overviewGroup} key={item.link}>
                 <div className="flex">
                   <h3 style={{ marginBottom: 8 }}>
-                    <Link href={normalizeHref(item.link)}>{item.text}</Link>
+                    <Link href={normalizeHref(item.link)}>
+                      {renderInlineMarkdown(item.text)}
+                    </Link>
                   </h3>
                 </div>
                 <ul className="list-none">
@@ -142,7 +217,7 @@ export function Overview(props: {
                       } first:mt-2`}
                     >
                       <Link href={`${normalizeHref(item.link)}#${header.id}`}>
-                        {header.text}
+                        {renderInlineMarkdown(header.text)}
                       </Link>
                     </li>
                   ))}

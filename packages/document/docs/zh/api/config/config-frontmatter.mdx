@@ -43,6 +43,26 @@ import PageType from '@zh/fragments/page-type';
 
 <PageType />
 
+## titleSuffix
+
+- Type: `string`
+
+设置页面标题的后缀。未设置 `titleSuffix` 时，默认使用站点的 [title](/api/config/config-basic#title) 作为后缀。
+
+```yaml
+---
+titleSuffix: '基于 Rspack 的静态站点生成器'
+---
+```
+
+标题与后缀之间默认使用 `-` 作为分隔符，你也可以使用 `|` 进行分隔：
+
+```yaml
+---
+titleSuffix: '| 基于 Rspack 的静态站点生成器'
+---
+```
+
 ## hero
 
 - Type: `Object`
@@ -50,13 +70,19 @@ import PageType from '@zh/fragments/page-type';
 `home` 页面的 hero 配置。它有以下类型：
 
 ```ts
-export interface Hero {
+interface Hero {
   name: string;
   text: string;
   tagline: string;
   image?: {
     src: string;
     alt: string;
+    /**
+     * `srcset` 和 `sizes` 同 `<img>` 的同名属性，取值请参考 https://mdn.io/srcset。
+     * 值为数组时，rspress 将使用逗号将其合并为字符串。
+     **/
+    srcset?: string | string[];
+    sizes?: string | string[];
   };
   actions: {
     text: string;
@@ -84,6 +110,19 @@ hero:
       text: 快速开始
       link: /zh/guide/getting-started
 ---
+```
+
+在设置 `hero.text` 时，你可以使用 YAML 的 `|` 符号来手动控制换行：
+
+```yaml
+---
+pageType: home
+
+hero:
+  name: Rspress
+  text: |
+    文档工程
+    解决方案
 ```
 
 或者你也可以用 `HTML` 来指定页面的 hero config：
@@ -114,7 +153,7 @@ hero:
 `home` 页面的功能配置。它有以下类型：
 
 ```ts
-export interface Feature {
+interface Feature {
   title: string;
   details: string;
   icon: string;
@@ -183,5 +222,26 @@ footer: false
 ```yaml
 ---
 navbar: false
+---
+```
+
+## overviewHeaders
+
+- Type: `number[]`
+- Default: `[2]`
+
+在预览页中展示的标题级别。默认情况下，展示的标题为 h2。但是如果你想展示不同的标题级别，你可以使用 `overviewHeaders` 这个 Front Matter 字段来指定。例如：
+
+```yaml
+---
+overviewHeaders: []
+---
+```
+
+或者
+
+```yaml
+---
+overviewHeaders: [2, 3]
 ---
 ```

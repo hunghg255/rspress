@@ -15,7 +15,7 @@
     "modern",
     "modern.js"
   ],
-  "version": "1.15.1",
+  "version": "1.20.1",
   "jsnext:source": "./src/index.ts",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
@@ -39,13 +39,13 @@
     "@rspress/plugin-api-docgen": "workspace:*"
   },
   "devDependencies": {
-    "@modern-js/utils": "2.48.1",
-    "@types/node": "^14",
+    "@modern-js/utils": "2.49.2",
+    "@types/node": "^18.11.17",
     "@types/react": "^18",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^5",
-    "vitest": "0.33.0"
+    "vitest": "0.34.1"
   },
   "sideEffects": [
     "**/*.scss"

@@ -1,6 +1,6 @@
 {
   "name": "@rspress/plugin-api-docgen",
-  "version": "1.15.1",
+  "version": "1.20.1",
   "description": "A plugin for rspress to generate api doc.",
   "bugs": "https://github.com/web-infra-dev/rspress/issues",
   "repository": {
@@ -16,22 +16,13 @@
     "dev": "modern build -w",
     "build": "modern build",
     "reset": "rimraf ./**/node_modules",
-    "lint": "modern lint",
-    "change": "modern change",
-    "bump": "modern bump",
-    "pre": "modern pre",
-    "change-status": "modern change-status",
-    "gen-release-note": "modern gen-release-note",
-    "release": "modern release",
-    "new": "modern new",
-    "test": "vitest run --passWithNoTests",
-    "upgrade": "modern upgrade"
+    "test": "vitest run --passWithNoTests"
   },
   "engines": {
     "node": ">=14.17.6"
   },
   "dependencies": {
-    "@modern-js/utils": "2.48.1",
+    "@modern-js/utils": "2.49.2",
     "react-markdown": "8.0.7",
     "react-docgen-typescript": "2.2.2",
     "documentation": "14.0.2",
@@ -44,17 +35,23 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "mdast-util-mdxjs-esm": "^1.3.0",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.1",
     "typescript": "^5",
     "unified": "^10.1.2",
     "unist-util-visit": "^4.1.1"
   },
   "peerDependencies": {
-    "react": ">=17",
+    "react": ">=17.0.0",
     "react-router-dom": "^6.8.1",
-    "@rspress/core": "^1.0.2"
+    "@rspress/core": "^1.0.2",
+    "typescript": "^5"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
   },
   "files": [
     "dist",

@@ -1,6 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { RSPRESS_TEMP_DIR } from '@rspress/shared';
+import { APPEARANCE_KEY, RSPRESS_TEMP_DIR } from '@rspress/shared';
 
 export const isProduction = () => process.env.NODE_ENV === 'production';
 
@@ -8,7 +8,20 @@ export const isProduction = () => process.env.NODE_ENV === 'production';
 export const importStatementRegex =
   /import\s+(.*?)\s+from\s+(['"])(.*?)(?:"|');?/gm;
 
-// @ts-expect-error
+// In the first render, the theme will be set according to the user's system theme
+// - Should be injected into both development and production modes
+// - Class hook (.dark) is set for internal use (Tailwind)
+// - Style hook (colorScheme) is set for external use (CSS media queries or `light-dark()` function)
+export const inlineThemeScript = `{
+  const saved = localStorage.getItem('${APPEARANCE_KEY}')
+  const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  const isDark = !saved || saved === 'auto' ? preferDark : saved === 'dark'
+  document.documentElement.classList.toggle('dark', isDark)
+  document.documentElement.style.colorScheme = isDark ? 'dark' : 'light'
+}`
+  .replace(/\n/g, ';')
+  .replace(/\s{2,}/g, '');
+
 const dirname = path.dirname(fileURLToPath(new URL(import.meta.url)));
 
 export const PACKAGE_ROOT = path.join(dirname, '..');
@@ -34,6 +47,8 @@ export const HEAD_MARKER = '<!--<?- HEAD ?>-->';
 export const META_GENERATOR = '<!--<?- GENERATOR ?>-->';
 export const HTML_START_TAG = '<html';
 export const BODY_START_TAG = '<body';
+
+export const DEFAULT_TITLE = 'Rspress';
 
 export const PUBLIC_DIR = 'public';
 export const TEMP_DIR = path.join(

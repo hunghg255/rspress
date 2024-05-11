@@ -1,10 +1,13 @@
 ---
 pageType: home
+titleSuffix: 'Rspack-based Static Site Generator'
 
 hero:
   name: Rspress
-  text: Rspack-based Static Site Generator
-  tagline: Simple, efficient and easy to extend.
+  text: |
+    Lightning Fast
+    Static Site Generator
+  tagline: Simple, efficient and easy to extend
   actions:
     - theme: brand
       text: Introduction

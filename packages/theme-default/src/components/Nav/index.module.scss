@@ -1,3 +1,7 @@
+:global(.rspress-nav-menu-group-button) {
+  background-color: transparent;
+}
+
 .hidden {
   transform: translate3d(0, calc(-100%), 0);
   background: transparent;
@@ -36,7 +40,7 @@
 .singleItem:hover {
   background-color: var(--rp-c-bg-mute);
   cursor: pointer;
-  color: var(--rp-c-brand-dark);
+  color: var(--rp-c-link);
   border-radius: var(--rp-radius);
 }
 

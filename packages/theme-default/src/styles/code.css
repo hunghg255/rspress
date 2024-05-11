@@ -20,19 +20,17 @@
   --rp-code-line-number-color: rgba(60, 60, 60, 0.33);
 }
 
-.rspress-doc :not(pre, h1, h2, h3, h4, h5, h6) > code,
-.rspress-sidebar code
+.rspress-doc :not(pre, h1, h2, h3, h4, h5, h6) > code
 {
   font-size: var(--rp-code-font-size);
 }
 
-.rspress-doc :not(pre, div, a) > code,
-.rspress-sidebar code
+.rspress-doc :not(pre, div) > code
 {
+  padding: 3px 6px;
   border-radius: var(--rp-radius-small);
-  padding: 4px 8px;
   color: var(--rp-c-text-code);
-  background-color: var(--rp-c-bg-mute);
+  background-color: var(--rp-c-text-code-bg);
   overflow-wrap: break-word;
 }
 
@@ -43,13 +41,12 @@
 }
 
 .rspress-doc a > code {
-  color: var(--rp-c-brand);
+  color: var(--rp-c-brand-dark);
   transition: color 0.25s;
-  border: none;
 }
 
 .rspress-doc a:hover > code {
-  color: var(--rp-c-brand-dark);
+  color: var(--rp-c-brand);
 }
 
 .rspress-doc div[class^='language-'] {

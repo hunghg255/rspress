@@ -14,11 +14,16 @@
   background-color: var(--rp-c-bg);
   padding-left: 10px;
   > button {
+    background-color: transparent;
     padding: 12px;
     transition: color 0.5s;
     &:hover {
       color: var(--rp-c-text-3);
     }
+  }
+
+  &:empty {
+    display: none;
   }
 }
 

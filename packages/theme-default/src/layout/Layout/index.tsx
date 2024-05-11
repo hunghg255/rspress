@@ -18,6 +18,21 @@ export type LayoutProps = {
   HomeLayoutProps &
   NavProps;
 
+const concatTitle = (title: string, suffix?: string) => {
+  if (!suffix) {
+    return title;
+  }
+
+  title = title.trim();
+  suffix = suffix.trim();
+
+  if (!suffix.startsWith('-') && !suffix.startsWith('|')) {
+    return `${title} - ${suffix}`;
+  }
+
+  return `${title} ${suffix}`;
+};
+
 export const Layout: React.FC<LayoutProps> = props => {
   const {
     top,
@@ -26,6 +41,8 @@ export const Layout: React.FC<LayoutProps> = props => {
     afterDocFooter,
     beforeDoc,
     afterDoc,
+    beforeDocContent,
+    afterDocContent,
     beforeSidebar,
     afterSidebar,
     beforeOutline,
@@ -42,6 +59,8 @@ export const Layout: React.FC<LayoutProps> = props => {
   const docProps: DocLayoutProps = {
     beforeDocFooter,
     afterDocFooter,
+    beforeDocContent,
+    afterDocContent,
     beforeDoc,
     afterDoc,
     beforeSidebar,
@@ -61,21 +80,28 @@ export const Layout: React.FC<LayoutProps> = props => {
     lang: currentLang,
     // Inject by remark-plugin-toc
     title: articleTitle,
-    frontmatter,
+    frontmatter = {},
   } = page;
   const localesData = useLocaleSiteData();
   useRedirect4FirstVisit();
+
   // Always show sidebar by default
   // Priority: front matter title > h1 title
-  let title = (frontmatter?.title as string) ?? articleTitle;
+  let title = (frontmatter.title as string) ?? articleTitle;
   const mainTitle = siteData.title || localesData.title;
 
   if (title && pageType === 'doc') {
     // append main title as a suffix
-    title = `${title} - ${mainTitle}`;
+    title = concatTitle(
+      title,
+      (frontmatter.titleSuffix as string) || mainTitle,
+    );
+  } else if (pageType === 'home') {
+    title = concatTitle(mainTitle, frontmatter.titleSuffix as string);
   } else {
     title = mainTitle;
   }
+
   const description =
     (frontmatter?.description as string) ||
     siteData.description ||

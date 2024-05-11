@@ -1,5 +1,6 @@
 import path from 'path';
-import { PageIndexInfo, SEARCH_INDEX_NAME } from '@rspress/shared';
+import { groupBy } from 'lodash-es';
+import { SEARCH_INDEX_NAME } from '@rspress/shared';
 import fs from '@rspress/shared/fs-extra';
 import { FactoryContext, RuntimeModuleID } from '..';
 import { normalizeThemeConfig } from './normalizeThemeConfig';
@@ -9,7 +10,7 @@ import { TEMP_DIR, isProduction } from '@/node/constants';
 
 // How can we let the client runtime access the `indexHash`?
 // We can only do something after the Rspack build process becuase the index hash is generated within Rspack build process.There are two ways to do this:
-// 1. insert window.__INDEX_HASH__ = 'xxx' into the html template manually
+// 1. insert window.__INDEX_HASH__ = 'foo' into the html template manually
 // 2. replace the `__INDEX_HASH__` placeholder in the html template with the real index hash after Rspack build
 export const indexHash = '';
 
@@ -29,6 +30,14 @@ function deletePriviteKey<T>(obj: T): T {
 export async function siteDataVMPlugin(context: FactoryContext) {
   const { config, alias, userDocRoot, routeService, pluginDriver } = context;
   const userConfig = config;
+  // prevent modify the origin config object
+  const tempSearchObj = Object.assign({}, userConfig.search);
+
+  // searchHooks is a absolute path which may leak information
+  if (tempSearchObj) {
+    tempSearchObj.searchHooks = undefined;
+  }
+
   const replaceRules = userConfig?.replaceRules || [];
   // If the dev server restart when config file, we will reuse the siteData instead of extracting the siteData from source files again.
   const domain =
@@ -47,36 +56,47 @@ export async function siteDataVMPlugin(context: FactoryContext) {
   // modify page index by plugins
   await pluginDriver.modifySearchIndexData(pages);
 
-  // Categorize pages, sorted by language, and write search index to file
-  const pagesByLang = pages.reduce((acc, page) => {
-    if (!acc[page.lang]) {
-      acc[page.lang] = [];
-    }
+  const versioned =
+    userConfig.search &&
+    userConfig.search.mode !== 'remote' &&
+    userConfig.search.versioned;
+
+  const groupedPages = groupBy(pages, page => {
     if (page.frontmatter?.pageType === 'home') {
-      return acc;
+      return 'noindex';
     }
-    acc[page.lang].push(page);
-    return acc;
-  }, {} as Record<string, PageIndexInfo[]>);
 
-  const indexHashByLang = {} as Record<string, string>;
+    const version = versioned ? page.version : '';
+    const lang = page.lang || '';
 
-  // Generate search index by different languages, file name is {SEARCH_INDEX_NAME}.{lang}.{hash}.json
+    return `${version}###${lang}`;
+  });
+  // remove the pages marked as noindex
+  delete groupedPages.noindex;
+
+  const indexHashByGroup = {} as Record<string, string>;
+
+  // Generate search index by different versions & languages, file name is {SEARCH_INDEX_NAME}.{version}.{lang}.{hash}.json
   await Promise.all(
-    Object.keys(pagesByLang).map(async lang => {
+    Object.keys(groupedPages).map(async group => {
       // Avoid writing filepath in compile-time
-      const stringfiedIndex = JSON.stringify(
-        pagesByLang[lang].map(deletePriviteKey),
+      const stringifiedIndex = JSON.stringify(
+        groupedPages[group].map(deletePriviteKey),
       );
-      const indexHash = createHash(stringfiedIndex);
-      indexHashByLang[lang] = indexHash;
+      const indexHash = createHash(stringifiedIndex);
+      indexHashByGroup[group] = indexHash;
+
+      const [version, lang] = group.split('###');
+      const indexVersion = version ? `.${version.replace('.', '_')}` : '';
+      const indexLang = lang ? `.${lang}` : '';
+
       await fs.ensureDir(TEMP_DIR);
       await fs.writeFile(
         path.join(
           TEMP_DIR,
-          `${SEARCH_INDEX_NAME}${lang ? `.${lang}` : ''}.${indexHash}.json`,
+          `${SEARCH_INDEX_NAME}${indexVersion}${indexLang}.${indexHash}.json`,
         ),
-        stringfiedIndex,
+        stringifiedIndex,
       );
     }),
   );
@@ -96,16 +116,17 @@ export async function siteDataVMPlugin(context: FactoryContext) {
     lang: userConfig?.lang || '',
     locales: userConfig?.locales || userConfig.themeConfig?.locales || [],
     logo: userConfig?.logo || '',
+    logoText: userConfig?.logoText || '',
     ssg: userConfig?.ssg ?? true,
     multiVersion: {
       default: userConfig?.multiVersion?.default || '',
       versions: userConfig?.multiVersion?.versions || [],
     },
-    search: userConfig?.search ?? { mode: 'local' },
+    search: tempSearchObj ?? { mode: 'local' },
     pages: pages.map(page => {
       const { content, id, domain, _filepath, ...rest } = page;
       // In production, we cannot expose the complete filepath for security reasons
-      return isProduction() ? rest : { ...rest, _filepath }
+      return isProduction() ? rest : { ...rest, _filepath };
     }),
     markdown: {
       showLineNumbers: userConfig?.markdown?.showLineNumbers ?? false,
@@ -119,7 +140,7 @@ export async function siteDataVMPlugin(context: FactoryContext) {
       siteData,
     )}`,
     [RuntimeModuleID.SearchIndexHash]: `export default ${JSON.stringify(
-      indexHashByLang,
+      indexHashByGroup,
     )}`,
   };
 }

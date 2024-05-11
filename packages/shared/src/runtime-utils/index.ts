@@ -124,10 +124,11 @@ export function replaceLang(
   },
   base = '',
   cleanUrls = false,
+  isPageNotFound = false,
 ) {
   let url = removeBase(rawUrl, base);
   // rspress.dev/builder + switch to en -> rspress.dev/builder/en/index.html
-  if (!url) {
+  if (!url || isPageNotFound) {
     url = cleanUrls ? '/index' : '/index.html';
   }
 
@@ -179,10 +180,11 @@ export function replaceVersion(
   },
   base = '',
   cleanUrls = false,
+  isPageNotFound = false,
 ) {
   let url = removeBase(rawUrl, base);
   // rspress.dev/builder + switch to en -> rspress.dev/builder/en/index.html
-  if (!url) {
+  if (!url || isPageNotFound) {
     url = cleanUrls ? '/index' : '/index.html';
   }
   let versionPart = '';
@@ -242,9 +244,7 @@ export function normalizeHref(url?: string, cleanUrls = false) {
   // eslint-disable-next-line prefer-const
   let { url: cleanUrl, hash } = parseUrl(decodeURIComponent(url));
 
-  const hasExt = cleanUrl.split('/').pop()?.includes('.');
-
-  if (!cleanUrls && !cleanUrl.endsWith('.html') && !hasExt) {
+  if (!cleanUrls && !cleanUrl.endsWith('.html')) {
     if (cleanUrl.endsWith('/')) {
       cleanUrl += 'index.html';
     } else {
@@ -254,6 +254,10 @@ export function normalizeHref(url?: string, cleanUrls = false) {
 
   if (cleanUrls && cleanUrl.endsWith('/')) {
     cleanUrl += 'index';
+  }
+
+  if (cleanUrls && cleanUrl.endsWith('.html')) {
+    cleanUrl = cleanUrl.replace(/\.html$/, '');
   }
 
   return addLeadingSlash(hash ? `${cleanUrl}#${hash}` : cleanUrl);

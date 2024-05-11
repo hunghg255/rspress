@@ -14,7 +14,9 @@ import {
   PACKAGE_ROOT,
   OUTPUT_DIR,
   isProduction,
+  inlineThemeScript,
   PUBLIC_DIR,
+  DEFAULT_TITLE,
 } from './constants';
 import { rsbuildPluginDocVM } from './runtimeModule';
 import { serveSearchIndexMiddleware } from './searchIndex';
@@ -37,7 +39,10 @@ async function createInternalBuildConfig(
   isSSR: boolean,
   routeService: RouteService,
   pluginDriver: PluginDriver,
+  runtimeTempDir: string,
 ): Promise<RsbuildConfig> {
+  const { pluginReact } = await import('@rsbuild/plugin-react');
+
   const cwd = process.cwd();
   const CUSTOM_THEME_DIR =
     config?.themeDir ?? path.join(process.cwd(), 'theme');
@@ -77,6 +82,17 @@ async function createInternalBuildConfig(
   };
 
   return {
+    plugins: [
+      pluginReact(),
+      rsbuildPluginDocVM({
+        userDocRoot,
+        config,
+        isSSR,
+        runtimeTempDir,
+        routeService,
+        pluginDriver,
+      }),
+    ],
     server: {
       port:
         !isProduction() && process.env.PORT
@@ -101,9 +117,16 @@ async function createInternalBuildConfig(
       ],
     },
     html: {
-      title: config?.title,
+      title: config?.title ?? DEFAULT_TITLE,
       favicon: normalizeIcon(config?.icon),
       template: path.join(PACKAGE_ROOT, 'index.html'),
+      tags: [
+        config.themeConfig?.darkMode !== false && {
+          tag: 'script',
+          children: inlineThemeScript,
+          append: false,
+        },
+      ].filter(Boolean),
     },
     output: {
       targets: isSSR ? ['node'] : ['web'],
@@ -127,7 +150,7 @@ async function createInternalBuildConfig(
         'react-syntax-highlighter': path.dirname(
           require.resolve('react-syntax-highlighter/package.json'),
         ),
-        ...(await resolveReactAlias(reactVersion)),
+        ...(await resolveReactAlias(reactVersion, isSSR)),
         ...(await detectCustomIcon(CUSTOM_THEME_DIR)),
         '@theme-assets': path.join(DEFAULT_THEME, '../assets'),
       },
@@ -189,12 +212,7 @@ async function createInternalBuildConfig(
             routeService,
             pluginDriver,
           })
-          .end()
-          .use('string-replace-loader')
-          .loader(require.resolve('string-replace-loader'))
-          .options({
-            multiple: config?.replaceRules || [],
-          });
+          .end();
 
         if (chain.plugins.has(CHAIN_ID.PLUGIN.REACT_FAST_REFRESH)) {
           chain.plugin(CHAIN_ID.PLUGIN.REACT_FAST_REFRESH).tap(options => {
@@ -205,6 +223,11 @@ async function createInternalBuildConfig(
         }
 
         chain.resolve.extensions.prepend('.md').prepend('.mdx').prepend('.mjs');
+
+        chain.module
+          .rule('css-virtual-module')
+          .test(/\.rspress[\\/]runtime[\\/]virtual-global-styles/)
+          .merge({ sideEffects: true });
       },
     },
   };
@@ -235,7 +258,6 @@ export async function initRsbuild(
   const {
     default: { createRsbuild, mergeRsbuildConfig },
   } = await import('@rsbuild/core');
-  const { pluginReact } = await import('@rsbuild/plugin-react');
 
   const internalRsbuildConfig = await createInternalBuildConfig(
     userDocRoot,
@@ -243,6 +265,7 @@ export async function initRsbuild(
     isSSR,
     routeService,
     pluginDriver,
+    runtimeTempDir,
   );
 
   const rsbuild = await createRsbuild({
@@ -256,18 +279,7 @@ export async function initRsbuild(
     ),
   });
 
-  rsbuild.addPlugins([
-    rsbuildPluginDocVM({
-      userDocRoot,
-      config,
-      isSSR,
-      runtimeTempDir,
-      routeService,
-      pluginDriver,
-    }),
-    pluginReact(),
-    ...builderPlugins,
-  ]);
+  rsbuild.addPlugins(builderPlugins);
 
   return rsbuild;
 }

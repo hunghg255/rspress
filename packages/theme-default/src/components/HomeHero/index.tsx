@@ -1,13 +1,13 @@
-import { FrontMatterMeta } from '@rspress/shared';
 import {
   normalizeHrefInRuntime as normalizeHref,
   normalizeImagePath,
 } from '@rspress/runtime';
+import { FrontMatterMeta } from '@rspress/shared';
 import { Button } from '@theme';
 import { renderHtmlOrText } from '../../logic';
 import styles from './index.module.scss';
 
-const DEFAULT_HERO = {
+const DEFAULT_HERO: FrontMatterMeta['hero'] = {
   name: 'modern',
   text: 'modern ssg',
   tagline: 'modern ssg',
@@ -26,7 +26,7 @@ export function HomeHero({ frontmatter }: { frontmatter: FrontMatterMeta }) {
         .filter(text => text !== '')
     : [];
   return (
-    <div className="m-auto pt-0 px-6 pb-12 sm:pt-10 sm:px-16 md:pt-16 md:px-16 md:pb-16">
+    <div className="m-auto pt-0 px-6 pb-12 sm:pt-10 sm:px-16 md:pt-16 md:px-16 md:pb-16 relative">
       <div
         className={styles.mask}
         style={{
@@ -34,7 +34,7 @@ export function HomeHero({ frontmatter }: { frontmatter: FrontMatterMeta }) {
         }}
       ></div>
       <div className="m-auto flex flex-col md:flex-row max-w-6xl min-h-[50vh] mt-12 sm:mt-0">
-        <div className="flex flex-col justify-center text-center max-w-xl sm:max-w-4xl m-auto order-2 md:order-1">
+        <div className="flex flex-col justify-center items-center text-center max-w-xl sm:max-w-4xl m-auto order-2 md:order-1">
           <h1 className="font-bold text-3xl pb-2 sm:text-6xl md:text-7xl m-auto sm:m-4 md:m-0 md:pb-3 lg:pb-2 leading-tight z-10">
             <span className={styles.clip} style={{ lineHeight: '1.3' }}>
               {renderHtmlOrText(hero.name)}
@@ -78,6 +78,8 @@ export function HomeHero({ frontmatter }: { frontmatter: FrontMatterMeta }) {
             <img
               src={normalizeImagePath(hero.image?.src)}
               alt={hero.image?.alt}
+              srcSet={normalizeSrcsetAndSizes(hero.image?.srcset)}
+              sizes={normalizeSrcsetAndSizes(hero.image?.sizes)}
               width={375}
               height={375}
             />
@@ -86,4 +88,11 @@ export function HomeHero({ frontmatter }: { frontmatter: FrontMatterMeta }) {
       </div>
     </div>
   );
+}
+
+function normalizeSrcsetAndSizes(
+  field: undefined | string | string[],
+): string | undefined {
+  const r = (Array.isArray(field) ? field : [field]).filter(Boolean).join(', ');
+  return r || undefined;
 }

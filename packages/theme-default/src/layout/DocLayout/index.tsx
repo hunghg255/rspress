@@ -17,6 +17,8 @@ export interface DocLayoutProps {
   afterDocFooter?: React.ReactNode;
   beforeDoc?: React.ReactNode;
   afterDoc?: React.ReactNode;
+  beforeDocContent?: React.ReactNode;
+  afterDocContent?: React.ReactNode;
   beforeOutline?: React.ReactNode;
   afterOutline?: React.ReactNode;
   uiSwitch?: UISwitchResult;
@@ -28,6 +30,8 @@ export function DocLayout(props: DocLayoutProps) {
     afterDocFooter,
     beforeDoc,
     afterDoc,
+    beforeDocContent,
+    afterDocContent,
     beforeOutline,
     afterOutline,
     beforeSidebar,
@@ -62,22 +66,29 @@ export function DocLayout(props: DocLayoutProps) {
       }}
     >
       {beforeDoc}
-      {uiSwitch.showSidebar ? (
-        <SideMenu
-          beforeSidebar={beforeSidebar}
-          afterSidebar={afterSidebar}
-          uiSwitch={uiSwitch}
-        />
-      ) : null}
+      <SideMenu
+        outlineTitle={outlineTitle}
+        beforeSidebar={beforeSidebar}
+        afterSidebar={afterSidebar}
+        uiSwitch={uiSwitch}
+      />
       <div
         className={`${styles.content} rspress-doc-container flex flex-shrink-0 mx-auto`}
       >
         <div className="w-full flex-1">
           {isOverviewPage ? (
-            <Overview content={docContent} />
+            <>
+              {beforeDocContent}
+                <Overview content={docContent} />
+              {afterDocContent}
+            </>
           ) : (
             <div>
-              <div className="rspress-doc">{docContent}</div>
+              <div className="rspress-doc">
+                {beforeDocContent}
+                {docContent}
+                {afterDocContent}
+              </div>
               <div className="rspress-doc-footer">
                 {beforeDocFooter}
                 {uiSwitch.showDocFooter && <DocFooter />}

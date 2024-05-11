@@ -6,7 +6,6 @@ import fs from '@rspress/shared/fs-extra';
 import {
   PageData,
   UserConfig,
-  APPEARANCE_KEY,
   normalizeSlash,
   withBase,
   isDebugMode,
@@ -26,19 +25,6 @@ import { writeSearchIndex } from './searchIndex';
 import { PluginDriver } from './PluginDriver';
 import type { Route } from '@/node/route/RouteService';
 import { routeService } from '@/node/route/init';
-
-// In the first render, the theme will be set according to the user's system theme
-const CHECK_DARK_LIGHT_SCRIPT = `
-<script id="check-dark-light">
-;(() => {
-  const saved = localStorage.getItem('${APPEARANCE_KEY}')
-  const prefereDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  if (!saved || saved === 'auto' ? prefereDark : saved === 'dark') {
-    document.documentElement.classList.add('dark')
-  }
-})()
-</script>
-`;
 
 interface BuildOptions {
   appDirectory: string;
@@ -177,9 +163,6 @@ export async function renderPages(
                   helmet?.link?.toString(),
                   helmet?.style?.toString(),
                   helmet?.script?.toString(),
-                  config.themeConfig?.darkMode !== false
-                    ? CHECK_DARK_LIGHT_SCRIPT
-                    : '',
                 ])
                 .join(''),
             );
@@ -228,10 +211,10 @@ export async function renderPages(
 export async function build(options: BuildOptions) {
   const { docDirectory, appDirectory, config } = options;
   const pluginDriver = new PluginDriver(config, true);
-  const enableSSG = config.ssg ?? true;
   await pluginDriver.init();
   const modifiedConfig = await pluginDriver.modifyConfig();
   await pluginDriver.beforeBuild();
+  const enableSSG = modifiedConfig.ssg ?? true;
 
   // empty temp dir before build
   await fs.emptyDir(TEMP_DIR);
