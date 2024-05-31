@@ -229,7 +229,7 @@ export interface Hero {
   text: string;
   tagline: string;
   image?: {
-    src: string;
+    src: string | { dark: string; light: string };
     alt: string;
     /**
      * `srcset` and `sizes` are attributes of `<img>` tag. Please refer to https://mdn.io/srcset for the usage.
@@ -336,6 +336,7 @@ export type RemoteSearchOptions = SearchHooks & {
   domain?: string;
   indexName: string;
   searchIndexes?: RemoteSearchIndexInfo[];
+  searchLoading?: boolean;
 };
 
 export type SearchOptions = LocalSearchOptions | RemoteSearchOptions | false;

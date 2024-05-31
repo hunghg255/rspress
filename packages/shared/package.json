@@ -1,6 +1,6 @@
 {
   "name": "@rspress/shared",
-  "version": "1.20.1",
+  "version": "1.22.0",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -51,7 +51,7 @@
     "upgrade": "modern upgrade"
   },
   "dependencies": {
-    "@rsbuild/core": "0.6.13",
+    "@rsbuild/core": "0.7.0",
     "unified": "^10.1.2",
     "chalk": "4.1.2",
     "execa": "5.1.1",
@@ -61,7 +61,7 @@
   "devDependencies": {
     "lodash-es": "^4.17.21",
     "@types/interpret": "^1.1.1",
-    "@types/jest": "~29.2.4",
+    "@types/jest": "~29.5.12",
     "@types/lodash": "^4.17.0",
     "@types/lodash-es": "^4.17.8",
     "@types/node": "^18.11.17",

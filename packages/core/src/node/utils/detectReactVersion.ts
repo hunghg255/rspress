@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from '@rspress/shared/fs-extra';
-import { logger } from '@rspress/shared/logger';
 import enhancedResolve from 'enhanced-resolve';
+import { logger } from '@rspress/shared/logger';
 import { PACKAGE_ROOT } from '../constants';
 
 const { CachedInputFileSystem, ResolverFactory } = enhancedResolve;
@@ -38,7 +38,7 @@ export async function resolveReactAlias(reactVersion: number, isSSR: boolean) {
   }
   const alias: Record<string, string> = {};
   const resolver = ResolverFactory.createResolver({
-    fileSystem: new CachedInputFileSystem(fs),
+    fileSystem: new CachedInputFileSystem(fs as any, 0),
     extensions: ['.js'],
     alias,
     conditionNames: isSSR ? ['...'] : ['browser', '...'],
