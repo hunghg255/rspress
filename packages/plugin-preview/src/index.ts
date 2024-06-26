@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { join } from 'node:path';
 import net from 'node:net';
 import {
   type RouteMeta,
@@ -193,6 +193,8 @@ export function pluginPreview(options?: Options): RspressPlugin {
       if (!isProd) {
         pageData.devPort = port;
       }
+      // highlightLanguages analysis is built-in in mdx-rs, we need to add extraHighlightLanguages in preview plugin which using mdx-js to perform code block
+      pageData.extraHighlightLanguages = previewLanguages;
     },
     markdown: {
       remarkPlugins: [

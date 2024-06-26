@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { RuntimeModuleID } from '../src/node/runtimeModule';
 import { siteDataVMPlugin } from '../src/node/runtimeModule/siteData';
@@ -26,7 +26,9 @@ describe('automatic import of prism languages', () => {
       },
     },
     pluginDriver: {
-      async extendPageData(_pageData: any) {},
+      async extendPageData(pageData: any) {
+        pageData.extraHighlightLanguages = ['jsx', 'tsx'];
+      },
       async modifySearchIndexData(_pages: any) {},
     },
   };

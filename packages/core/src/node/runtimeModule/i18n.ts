@@ -1,6 +1,6 @@
-import { join } from 'path';
-import { UserConfig } from '@rspress/shared';
-import { FactoryContext, RuntimeModuleID } from '.';
+import { join } from 'node:path';
+import type { UserConfig } from '@rspress/shared';
+import { type FactoryContext, RuntimeModuleID } from '.';
 
 const DEFAULT_I18N_SOURCE = join(process.cwd(), 'i18n.json');
 
@@ -19,6 +19,6 @@ export function i18nVMPlugin(context: FactoryContext) {
   const { config } = context;
   const i18nData = getI18nData(config);
   return {
-    [RuntimeModuleID.I18nText]: `export default ${JSON.stringify(i18nData)}`,
+    [RuntimeModuleID.I18nText]: `export default ${JSON.stringify(i18nData, null, 2)}`,
   };
 }

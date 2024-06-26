@@ -1,15 +1,15 @@
-import path from 'path';
+import path from 'node:path';
 import fs from '@rspress/shared/fs-extra';
-import { pathToFileURL } from 'url';
+import { pathToFileURL } from 'node:url';
 import { createProcessor } from '@mdx-js/mdx';
 import { isProduction } from '@rspress/shared';
 import { logger } from '@rspress/shared/logger';
 import { loadFrontMatter } from '@rspress/shared/node-utils';
 import { createMDXOptions } from './options';
-import { TocItem } from './remarkPlugins/toc';
+import type { TocItem } from './remarkPlugins/toc';
 import { checkLinks } from './remarkPlugins/checkDeadLink';
 import { TEMP_DIR } from '../constants';
-import { PluginDriver } from '../PluginDriver';
+import type { PluginDriver } from '../PluginDriver';
 import { RuntimeModuleID } from '../runtimeModule';
 import {
   normalizePath,
@@ -50,14 +50,18 @@ export async function updateSiteDataRuntimeModule(
   );
   await fs.writeFile(
     siteDataModulePath,
-    `export default ${JSON.stringify({
-      ...siteData,
-      timestamp: Date.now().toString(),
-      pages: siteData.pages.map(page =>
-        // Update page meta if the page is updated
-        page._filepath === modulePath ? { ...page, ...pageMeta } : page,
-      ),
-    })}`,
+    `export default ${JSON.stringify(
+      {
+        ...siteData,
+        timestamp: Date.now().toString(),
+        pages: siteData.pages.map(page =>
+          // Update page meta if the page is updated
+          page._filepath === modulePath ? { ...page, ...pageMeta } : page,
+        ),
+      },
+      null,
+      2,
+    )}`,
   );
 }
 

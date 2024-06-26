@@ -1,11 +1,11 @@
-import { dirname, join } from 'path';
-import { pathToFileURL } from 'url';
-import { HelmetData } from 'react-helmet-async';
+import { dirname, join } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import type { HelmetData } from 'react-helmet-async';
 import chalk from '@rspress/shared/chalk';
 import fs from '@rspress/shared/fs-extra';
 import {
-  PageData,
-  UserConfig,
+  type PageData,
+  type UserConfig,
   normalizeSlash,
   withBase,
   isDebugMode,
@@ -25,6 +25,7 @@ import { writeSearchIndex } from './searchIndex';
 import { PluginDriver } from './PluginDriver';
 import type { Route } from '@/node/route/RouteService';
 import { routeService } from '@/node/route/init';
+import { renderFrontmatterHead, renderConfigHead } from './utils/renderHead';
 
 interface BuildOptions {
   appDirectory: string;
@@ -122,8 +123,17 @@ export async function renderPages(
     const additionalRoutes = (await pluginDriver.addSSGRoutes()).map(route => ({
       routePath: withBase(route.path, base),
     }));
+    const allRoutes = [...routes, ...additionalRoutes];
+    const is404RouteInRoutes = allRoutes.some(
+      route => route.routePath === '/404',
+    );
+    if (!is404RouteInRoutes) {
+      allRoutes.push({
+        routePath: '/404',
+      });
+    }
     await Promise.all(
-      [...routes, ...additionalRoutes]
+      allRoutes
         .filter(route => {
           // filter the route including dynamic params
           return !route.routePath.includes(':');
@@ -147,6 +157,8 @@ export async function renderPages(
 
           const { helmet } = helmetContext.context;
           let html = htmlTemplate
+            // During ssr, we already have the title in react-helmet
+            .replace(/<title>(.*?)<\/title>/gi, '')
             // Don't use `string` as second param
             // To avoid some special characters transformed to the marker, such as `$&`, etc.
             .replace(APP_HTML_MARKER, () => appHtml)
@@ -156,15 +168,15 @@ export async function renderPages(
             )
             .replace(
               HEAD_MARKER,
-              (config?.head || [])
-                .concat([
-                  helmet?.title?.toString(),
-                  helmet?.meta?.toString(),
-                  helmet?.link?.toString(),
-                  helmet?.style?.toString(),
-                  helmet?.script?.toString(),
-                ])
-                .join(''),
+              [
+                await renderConfigHead(config, route),
+                helmet?.title?.toString(),
+                helmet?.meta?.toString(),
+                helmet?.link?.toString(),
+                helmet?.style?.toString(),
+                helmet?.script?.toString(),
+                await renderFrontmatterHead(route),
+              ].join(''),
             );
           if (helmet?.htmlAttributes) {
             html = html.replace(
